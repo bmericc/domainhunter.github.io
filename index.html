@@ -670,8 +670,13 @@
       </div>
       <div class="new-card reveal">
         <span class="v-badge">YENİ</span>
-        <h3 data-i18n="n6_h">PHP 8.1+ Modern Mimari</h3>
-        <p data-i18n="n6_p">Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv konfigürasyonu. Deprecated mysql_* fonksiyonları tamamen kaldırıldı.</p>
+        <h3 data-i18n="n6_h">Symfony Mailer 7 – SMTP Desteği</h3>
+        <p data-i18n="n6_p">PHP native <code>mail()</code> yerine Symfony Mailer 7 ile SMTP, Gmail ve TLS desteği. <code>MAILER_DSN</code> ayarıyla yapılandırın; SMTP tanımlı değilse otomatik olarak <code>mail()</code>'e düşer.</p>
+      </div>
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n7_h">PHP 8.1+ Modern Mimari</h3>
+        <p data-i18n="n7_p">Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv konfigürasyonu. Deprecated mysql_* fonksiyonları tamamen kaldırıldı.</p>
       </div>
     </div>
   </div>
@@ -694,8 +699,8 @@
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon">📧</div>
-        <h3 data-i18n="f2_h">E-posta Bildirimleri</h3>
-        <p data-i18n="f2_p">WHOIS bilgisinde değişiklik tespit edildiğinde anında e-posta bildirimi alırsınız. Süresi dolan domainleri asla kaçırmayın.</p>
+        <h3 data-i18n="f2_h">SMTP E-posta Bildirimleri</h3>
+        <p data-i18n="f2_p">Symfony Mailer 7 ile SMTP, Gmail veya TLS üzerinden e-posta bildirimleri. <code>MAILER_DSN</code> ile tek satırda yapılandırın; fallback olarak PHP <code>mail()</code> de desteklenir.</p>
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon">🖥️</div>
@@ -861,6 +866,10 @@
         <div><div class="t-name">Symfony Console</div><div class="t-ver">7.x · CLI</div></div>
       </div>
       <div class="tech-card reveal">
+        <span class="t-icon">✉️</span>
+        <div><div class="t-name">Symfony Mailer</div><div class="t-ver">7.x · SMTP / Gmail</div></div>
+      </div>
+      <div class="tech-card reveal">
         <span class="t-icon">💉</span>
         <div><div class="t-name">PHP-DI</div><div class="t-ver">7.x · DI Container</div></div>
       </div>
@@ -905,7 +914,15 @@
         <div>&nbsp;</div>
         <div><span class="cm"># 3. Konfigürasyonu ayarla</span></div>
         <div><span class="ck">cp</span> <span class="cv">.env.example .env</span></div>
-        <div><span class="cm"># .env dosyasını düzenle (DB, MAIL vb.)</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># .env içeriği (önemli ayarlar):</span></div>
+        <div><span class="cs">DB_DRIVER</span>=<span class="cv">sqlite</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># veya mysql</span></div>
+        <div><span class="cs">ALERT_EMAIL</span>=<span class="cv">admin@example.com</span></div>
+        <div><span class="cs">MAILER_FROM</span>=<span class="cv">noreply@example.com</span></div>
+        <div><span class="cm"># SMTP (Symfony Mailer DSN):</span></div>
+        <div><span class="cs">MAILER_DSN</span>=<span class="cv">smtp://user:pass@smtp.example.com:587</span></div>
+        <div><span class="cs">MAILER_DSN</span>=<span class="cv">smtp://user:pass@smtp.gmail.com:465?encryption=tls</span></div>
+        <div><span class="cs">MAILER_DSN</span>=<span class="cv">native://default</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># PHP mail() fallback</span></div>
         <div>&nbsp;</div>
         <div><span class="cm"># 4. Veritabanını oluştur</span></div>
         <div><span class="ck">php</span> <span class="cv">bin/migrate.php</span></div>
@@ -1077,11 +1094,12 @@ const T = {
     n3_h:"SQLite & MySQL Desteği", n3_p:"SQLite ile sıfır konfigürasyonlu başlangıç. Üretim ortamları için MySQL desteği. PDO prepared statement güvenliği.",
     n4_h:"PHAR Tek Dosya Dağıtımı", n4_p:"Tek satır curl komutuyla PHAR arşivi indirin ve CLI'yi anında kullanmaya başlayın. Composer gerektirmez.",
     n5_h:"80+ TLD & IDN Desteği", n5_p:"Tüm .tr uzantıları dahil 80'den fazla TLD. Punycode/IDN ile ASCII olmayan uluslararası domain desteği.",
-    n6_h:"PHP 8.1+ Modern Mimari", n6_p:"Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv konfigürasyonu. Deprecated mysql_* fonksiyonları tamamen kaldırıldı.",
+    n6_h:"Symfony Mailer 7 – SMTP Desteği", n6_p:"PHP native <code>mail()</code> yerine Symfony Mailer 7 ile SMTP, Gmail ve TLS desteği. <code>MAILER_DSN</code> ayarıyla yapılandırın; SMTP tanımlı değilse otomatik olarak <code>mail()</code>'e düşer.",
+    n7_h:"PHP 8.1+ Modern Mimari", n7_p:"Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv konfigürasyonu. Deprecated mysql_* fonksiyonları tamamen kaldırıldı.",
     feat_tag:"Özellikler", feat_h2:"Her İhtiyacınız Karşılandı",
     feat_sub:"Domain Hunter v2.0.0, alan adı yönetimini basit ve güçlü hale getiren kapsamlı özellikler sunar.",
     f1_h:"Otomatik Domain İzleme", f1_p:"Cron uyumlu otomasyon ile domainleriniz periyodik olarak kontrol edilir. Kayıt, son kullanma ve güncelleme tarihleri takip edilir.",
-    f2_h:"E-posta Bildirimleri", f2_p:"WHOIS bilgisinde değişiklik tespit edildiğinde anında e-posta bildirimi alırsınız. Süresi dolan domainleri asla kaçırmayın.",
+    f2_h:"SMTP E-posta Bildirimleri", f2_p:"Symfony Mailer 7 ile SMTP, Gmail veya TLS üzerinden e-posta bildirimleri. <code>MAILER_DSN</code> ile tek satırda yapılandırın; fallback olarak PHP <code>mail()</code> de desteklenir.",
     f3_h:"Web Paneli", f3_p:"Slim 4 + Twig 3 tabanlı modern web arayüzü. Domainleri listeleyin, sıralayın, WHOIS bilgilerine anında erişin.",
     f4_h:"Güçlü CLI", f4_p:"Symfony Console 7 tabanlı komut satırı arayüzü. Script ve cron entegrasyonu için mükemmel.",
     f5_h:"80+ TLD Desteği", f5_p:".com .net .tr .com.tr .net.tr .de .uk .fr ve daha fazlası. Türkiye dahil dünya genelindeki tüm yaygın uzantılar.",
@@ -1133,11 +1151,12 @@ const T = {
     n3_h:"SQLite & MySQL Support", n3_p:"Zero-config start with SQLite. MySQL for production environments. PDO prepared statement security.",
     n4_h:"PHAR Single-File Distribution", n4_p:"Download the PHAR archive with a single curl command and start using the CLI instantly. No Composer needed.",
     n5_h:"80+ TLD & IDN Support", n5_p:"Over 80 TLDs including all .tr extensions. Punycode/IDN support for non-ASCII international domains.",
-    n6_h:"PHP 8.1+ Modern Architecture", n6_p:"Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv config. Deprecated mysql_* functions completely removed.",
+    n6_h:"Symfony Mailer 7 – SMTP Support", n6_p:"SMTP, Gmail and TLS email alerts via Symfony Mailer 7 instead of native <code>mail()</code>. Configure with a single <code>MAILER_DSN</code> line; falls back to PHP <code>mail()</code> automatically.",
+    n7_h:"PHP 8.1+ Modern Architecture", n7_p:"Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv config. Deprecated mysql_* functions completely removed.",
     feat_tag:"Features", feat_h2:"Everything You Need",
     feat_sub:"Domain Hunter v2.0.0 offers comprehensive features to make domain management simple and powerful.",
     f1_h:"Automatic Domain Monitoring", f1_p:"Cron-compatible automation checks your domains periodically. Tracks registration, expiration and update dates.",
-    f2_h:"Email Notifications", f2_p:"Get instant email notifications when a WHOIS change is detected. Never miss an expiring domain.",
+    f2_h:"SMTP Email Notifications", f2_p:"Email alerts via Symfony Mailer 7 with SMTP, Gmail or TLS support. Configure with one <code>MAILER_DSN</code> line; falls back to PHP <code>mail()</code> if not set.",
     f3_h:"Web Panel", f3_p:"Modern web interface based on Slim 4 + Twig 3. List, sort domains and access WHOIS data instantly.",
     f4_h:"Powerful CLI", f4_p:"Symfony Console 7 based command line interface. Perfect for script and cron integration.",
     f5_h:"80+ TLD Support", f5_p:".com .net .tr .com.tr .net.tr .de .uk .fr and more. All common extensions worldwide including Turkey.",
@@ -1189,11 +1208,12 @@ const T = {
     n3_h:"SQLite & MySQL-Unterstützung", n3_p:"Null-Konfiguration-Start mit SQLite. MySQL für Produktionsumgebungen. PDO Prepared Statement Sicherheit.",
     n4_h:"PHAR-Einzeldatei-Distribution", n4_p:"Laden Sie das PHAR-Archiv mit einem einzigen curl-Befehl herunter. Kein Composer erforderlich.",
     n5_h:"80+ TLD & IDN-Unterstützung", n5_p:"Über 80 TLDs einschließlich aller .tr-Erweiterungen. Punycode/IDN-Unterstützung für internationale Domains.",
-    n6_h:"PHP 8.1+ Moderne Architektur", n6_p:"Readonly-Eigenschaften, typed Properties, PHP-DI 7, phpdotenv. Veraltete mysql_*-Funktionen vollständig entfernt.",
+    n6_h:"Symfony Mailer 7 – SMTP-Unterstützung", n6_p:"SMTP, Gmail und TLS E-Mail-Benachrichtigungen über Symfony Mailer 7. Konfigurieren mit einer <code>MAILER_DSN</code>-Zeile; fällt automatisch auf PHP <code>mail()</code> zurück.",
+    n7_h:"PHP 8.1+ Moderne Architektur", n7_p:"Readonly-Eigenschaften, typed Properties, PHP-DI 7, phpdotenv. Veraltete mysql_*-Funktionen vollständig entfernt.",
     feat_tag:"Funktionen", feat_h2:"Alles, was Sie brauchen",
     feat_sub:"Domain Hunter v2.0.0 bietet umfassende Funktionen für einfaches und leistungsstarkes Domain-Management.",
     f1_h:"Automatische Domain-Überwachung", f1_p:"Cron-kompatible Automatisierung prüft Ihre Domains regelmäßig. Registrierung, Ablauf und Aktualisierungsdaten werden verfolgt.",
-    f2_h:"E-Mail-Benachrichtigungen", f2_p:"Erhalten Sie sofortige E-Mail-Benachrichtigungen bei WHOIS-Änderungen. Verpassen Sie keine ablaufende Domain.",
+    f2_h:"SMTP E-Mail-Benachrichtigungen", f2_p:"E-Mail-Benachrichtigungen über Symfony Mailer 7 mit SMTP, Gmail oder TLS. Mit einer <code>MAILER_DSN</code>-Zeile konfigurieren; fällt auf PHP <code>mail()</code> zurück.",
     f3_h:"Web-Panel", f3_p:"Modernes Web-Interface basierend auf Slim 4 + Twig 3. Domains auflisten, sortieren und WHOIS-Daten sofort abrufen.",
     f4_h:"Leistungsstarke CLI", f4_p:"Symfony Console 7 basierte Befehlszeilenschnittstelle. Perfekt für Script- und Cron-Integration.",
     f5_h:"80+ TLD-Unterstützung", f5_p:".com .net .tr .de .uk .fr und mehr. Alle gängigen Erweiterungen weltweit.",
@@ -1245,11 +1265,12 @@ const T = {
     n3_h:"Soporte SQLite & MySQL", n3_p:"Inicio sin configuración con SQLite. MySQL para entornos de producción. Seguridad con PDO prepared statements.",
     n4_h:"Distribución PHAR", n4_p:"Descargue el archivo PHAR con un solo comando curl y úselo de inmediato. Sin necesidad de Composer.",
     n5_h:"80+ TLD & IDN", n5_p:"Más de 80 TLDs incluidas todas las extensiones .tr. Soporte Punycode/IDN para dominios internacionales.",
-    n6_h:"Arquitectura Moderna PHP 8.1+", n6_p:"Propiedades readonly, PHP-DI 7, phpdotenv. Las funciones mysql_* obsoletas fueron eliminadas completamente.",
+    n6_h:"Symfony Mailer 7 – Soporte SMTP", n6_p:"Notificaciones por email con SMTP, Gmail o TLS vía Symfony Mailer 7. Configure con una línea <code>MAILER_DSN</code>; regresa automáticamente a PHP <code>mail()</code>.",
+    n7_h:"Arquitectura Moderna PHP 8.1+", n7_p:"Propiedades readonly, PHP-DI 7, phpdotenv. Las funciones mysql_* obsoletas fueron eliminadas completamente.",
     feat_tag:"Características", feat_h2:"Todo lo que Necesitas",
     feat_sub:"Domain Hunter v2.0.0 ofrece características completas para hacer la gestión de dominios simple y poderosa.",
     f1_h:"Monitoreo Automático", f1_p:"Automatización compatible con cron verifica sus dominios periódicamente.",
-    f2_h:"Notificaciones por Email", f2_p:"Reciba notificaciones instantáneas cuando se detecte un cambio en WHOIS.",
+    f2_h:"Notificaciones SMTP por Email", f2_p:"Alertas por email con Symfony Mailer 7, SMTP, Gmail o TLS. Configure con una línea <code>MAILER_DSN</code>; usa PHP <code>mail()</code> como alternativa.",
     f3_h:"Panel Web", f3_p:"Interfaz web moderna basada en Slim 4 + Twig 3.",
     f4_h:"CLI Poderoso", f4_p:"Interfaz de línea de comandos basada en Symfony Console 7.",
     f5_h:"80+ Soporte TLD", f5_p:".com .net .tr .de .uk .es y más. Todas las extensiones comunes en todo el mundo.",
@@ -1301,11 +1322,12 @@ const T = {
     n3_h:"Suporte SQLite & MySQL", n3_p:"Início sem configuração com SQLite. MySQL para ambientes de produção. Segurança com PDO prepared statements.",
     n4_h:"Distribuição PHAR", n4_p:"Baixe o arquivo PHAR com um único comando curl e comece a usar imediatamente.",
     n5_h:"80+ TLD & IDN", n5_p:"Mais de 80 TLDs incluindo todas as extensões .tr. Suporte Punycode/IDN.",
-    n6_h:"Arquitetura Moderna PHP 8.1+", n6_p:"Propriedades readonly, PHP-DI 7, phpdotenv. Funções mysql_* obsoletas completamente removidas.",
+    n6_h:"Symfony Mailer 7 – Suporte SMTP", n6_p:"Notificações por email com SMTP, Gmail ou TLS via Symfony Mailer 7. Configure com uma linha <code>MAILER_DSN</code>; usa PHP <code>mail()</code> como fallback.",
+    n7_h:"Arquitetura Moderna PHP 8.1+", n7_p:"Propriedades readonly, PHP-DI 7, phpdotenv. Funções mysql_* obsoletas completamente removidas.",
     feat_tag:"Recursos", feat_h2:"Tudo que Você Precisa",
     feat_sub:"Domain Hunter v2.0.0 oferece recursos abrangentes para tornar o gerenciamento de domínios simples e poderoso.",
     f1_h:"Monitoramento Automático", f1_p:"Automação compatível com cron verifica seus domínios periodicamente.",
-    f2_h:"Notificações por Email", f2_p:"Receba notificações instantâneas quando uma mudança no WHOIS for detectada.",
+    f2_h:"Notificações SMTP por Email", f2_p:"Alertas por email com Symfony Mailer 7, SMTP, Gmail ou TLS. Configure com uma linha <code>MAILER_DSN</code>; usa PHP <code>mail()</code> como fallback.",
     f3_h:"Painel Web", f3_p:"Interface web moderna baseada em Slim 4 + Twig 3.",
     f4_h:"CLI Poderosa", f4_p:"Interface de linha de comando baseada em Symfony Console 7.",
     f5_h:"80+ Suporte TLD", f5_p:".com .net .tr .de .uk .fr e mais. Todas as extensões comuns em todo o mundo.",
@@ -1357,11 +1379,12 @@ const T = {
     n3_h:"Поддержка SQLite & MySQL", n3_p:"Запуск без настройки с SQLite. MySQL для производственных сред. Безопасность PDO prepared statements.",
     n4_h:"Дистрибутив PHAR", n4_p:"Скачайте PHAR-архив одной командой curl и сразу используйте CLI. Composer не нужен.",
     n5_h:"80+ TLD & IDN", n5_p:"Более 80 TLD включая все расширения .tr. Поддержка Punycode/IDN для международных доменов.",
-    n6_h:"Современная архитектура PHP 8.1+", n6_p:"Readonly свойства, PHP-DI 7, phpdotenv. Устаревшие функции mysql_* полностью удалены.",
+    n6_h:"Symfony Mailer 7 – Поддержка SMTP", n6_p:"Email-уведомления через Symfony Mailer 7 с SMTP, Gmail или TLS. Настройка одной строкой <code>MAILER_DSN</code>; автоматически переключается на PHP <code>mail()</code>.",
+    n7_h:"Современная архитектура PHP 8.1+", n7_p:"Readonly свойства, PHP-DI 7, phpdotenv. Устаревшие функции mysql_* полностью удалены.",
     feat_tag:"Функции", feat_h2:"Всё что вам нужно",
     feat_sub:"Domain Hunter v2.0.0 предлагает комплексные функции для простого и мощного управления доменами.",
     f1_h:"Автоматический мониторинг", f1_p:"Совместимая с cron автоматизация периодически проверяет ваши домены.",
-    f2_h:"Email-уведомления", f2_p:"Получайте мгновенные email-уведомления при обнаружении изменений WHOIS.",
+    f2_h:"SMTP Email-уведомления", f2_p:"Email-уведомления через Symfony Mailer 7 с SMTP, Gmail или TLS. Настройка одной строкой <code>MAILER_DSN</code>; переключается на PHP <code>mail()</code> как запасной вариант.",
     f3_h:"Веб-панель", f3_p:"Современный веб-интерфейс на основе Slim 4 + Twig 3.",
     f4_h:"Мощный CLI", f4_p:"Интерфейс командной строки на основе Symfony Console 7.",
     f5_h:"80+ поддержка TLD", f5_p:".com .net .tr .de .uk .ru и многое другое.",

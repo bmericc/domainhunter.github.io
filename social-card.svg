@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
   <defs>
     <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#00e5a0"/>
@@ -11,91 +11,88 @@
   </defs>
 
   <!-- Background -->
-  <rect width="1200" height="630" fill="url(#g2)"/>
+  <rect width="1080" height="1080" fill="url(#g2)"/>
 
   <!-- Right decorative dots -->
-  <g opacity="0.12" fill="#00e5a0">
-    <circle cx="1060" cy="120" r="4"/><circle cx="1090" cy="120" r="4"/><circle cx="1120" cy="120" r="4"/><circle cx="1150" cy="120" r="4"/>
-    <circle cx="1060" cy="150" r="4"/><circle cx="1090" cy="150" r="4"/><circle cx="1120" cy="150" r="4"/><circle cx="1150" cy="150" r="4"/>
-    <circle cx="1060" cy="180" r="4"/><circle cx="1090" cy="180" r="4"/><circle cx="1120" cy="180" r="4"/><circle cx="1150" cy="180" r="4"/>
-    <circle cx="1060" cy="210" r="4"/><circle cx="1090" cy="210" r="4"/><circle cx="1120" cy="210" r="4"/><circle cx="1150" cy="210" r="4"/>
-    <circle cx="1060" cy="240" r="4"/><circle cx="1090" cy="240" r="4"/><circle cx="1120" cy="240" r="4"/><circle cx="1150" cy="240" r="4"/>
-    <circle cx="1060" cy="270" r="4"/><circle cx="1090" cy="270" r="4"/><circle cx="1120" cy="270" r="4"/><circle cx="1150" cy="270" r="4"/>
-    <circle cx="1060" cy="300" r="4"/><circle cx="1090" cy="300" r="4"/><circle cx="1120" cy="300" r="4"/><circle cx="1150" cy="300" r="4"/>
-    <circle cx="1060" cy="330" r="4"/><circle cx="1090" cy="330" r="4"/><circle cx="1120" cy="330" r="4"/><circle cx="1150" cy="330" r="4"/>
-    <circle cx="1060" cy="360" r="4"/><circle cx="1090" cy="360" r="4"/><circle cx="1120" cy="360" r="4"/><circle cx="1150" cy="360" r="4"/>
-    <circle cx="1060" cy="390" r="4"/><circle cx="1090" cy="390" r="4"/><circle cx="1120" cy="390" r="4"/><circle cx="1150" cy="390" r="4"/>
+  <g opacity="0.13" fill="#00e5a0">
+    <circle cx="980" cy="100" r="5"/><circle cx="1020" cy="100" r="5"/><circle cx="1060" cy="100" r="5"/>
+    <circle cx="980" cy="140" r="5"/><circle cx="1020" cy="140" r="5"/><circle cx="1060" cy="140" r="5"/>
+    <circle cx="980" cy="180" r="5"/><circle cx="1020" cy="180" r="5"/><circle cx="1060" cy="180" r="5"/>
+    <circle cx="980" cy="220" r="5"/><circle cx="1020" cy="220" r="5"/><circle cx="1060" cy="220" r="5"/>
+    <circle cx="980" cy="260" r="5"/><circle cx="1020" cy="260" r="5"/><circle cx="1060" cy="260" r="5"/>
+    <circle cx="980" cy="300" r="5"/><circle cx="1020" cy="300" r="5"/><circle cx="1060" cy="300" r="5"/>
+    <circle cx="980" cy="340" r="5"/><circle cx="1020" cy="340" r="5"/><circle cx="1060" cy="340" r="5"/>
+    <circle cx="980" cy="380" r="5"/><circle cx="1020" cy="380" r="5"/><circle cx="1060" cy="380" r="5"/>
+    <circle cx="980" cy="420" r="5"/><circle cx="1020" cy="420" r="5"/><circle cx="1060" cy="420" r="5"/>
+    <circle cx="980" cy="460" r="5"/><circle cx="1020" cy="460" r="5"/><circle cx="1060" cy="460" r="5"/>
+    <circle cx="980" cy="500" r="5"/><circle cx="1020" cy="500" r="5"/><circle cx="1060" cy="500" r="5"/>
+    <circle cx="980" cy="540" r="5"/><circle cx="1020" cy="540" r="5"/><circle cx="1060" cy="540" r="5"/>
   </g>
 
   <!-- Top accent bar -->
-  <rect width="1200" height="5" fill="url(#g1)"/>
+  <rect width="1080" height="6" fill="url(#g1)"/>
 
   <!-- Logo mark — trident -->
-  <g transform="translate(60,44)">
-    <!-- shaft -->
-    <rect x="11" y="0" width="4" height="38" fill="#00e5a0"/>
-    <!-- top tip -->
-    <rect x="12" y="-6" width="3" height="8" fill="#00e5a0"/>
-    <!-- left prong -->
-    <rect x="2" y="0" width="3" height="18" fill="#00e5a0"/>
-    <rect x="2" y="0" width="12" height="3" fill="#00e5a0"/>
-    <!-- right prong -->
-    <rect x="21" y="0" width="3" height="18" fill="#00e5a0"/>
-    <rect x="12" y="0" width="12" height="3" fill="#00e5a0"/>
-    <!-- base -->
-    <rect x="2" y="36" width="22" height="3" fill="#00e5a0"/>
+  <g transform="translate(60,52)">
+    <rect x="13" y="0"  width="5" height="44" fill="#00e5a0"/>
+    <rect x="14" y="-8" width="4" height="10" fill="#00e5a0"/>
+    <rect x="2"  y="0"  width="4" height="22" fill="#00e5a0"/>
+    <rect x="2"  y="0"  width="15" height="4" fill="#00e5a0"/>
+    <rect x="25" y="0"  width="4" height="22" fill="#00e5a0"/>
+    <rect x="15" y="0"  width="14" height="4" fill="#00e5a0"/>
+    <rect x="2"  y="42" width="27" height="4" fill="#00e5a0"/>
   </g>
 
   <!-- Brand name -->
-  <text x="100" y="80" font-family="system-ui,-apple-system,sans-serif" font-size="24" font-weight="700" fill="#ffffff" letter-spacing="-0.3">Domain Hunter</text>
+  <text x="108" y="92" font-family="system-ui,-apple-system,sans-serif" font-size="28" font-weight="700" fill="#ffffff" letter-spacing="-0.3">Domain Hunter</text>
 
   <!-- v2.0.0 badge -->
-  <rect x="1082" y="48" width="82" height="30" rx="15" fill="none" stroke="#00e5a0" stroke-width="1.5" opacity="0.7"/>
-  <text x="1123" y="68" font-family="system-ui,-apple-system,sans-serif" font-size="14" font-weight="600" fill="#00e5a0" text-anchor="middle">v2.0.0</text>
+  <rect x="952" y="58" width="88" height="34" rx="17" fill="none" stroke="#00e5a0" stroke-width="1.5" opacity="0.7"/>
+  <text x="996" y="80" font-family="system-ui,-apple-system,sans-serif" font-size="15" font-weight="600" fill="#00e5a0" text-anchor="middle">v2.0.0</text>
 
   <!-- Divider -->
-  <rect x="60" y="115" width="240" height="2.5" fill="url(#g1)" rx="1"/>
+  <rect x="60" y="130" width="260" height="3" fill="url(#g1)" rx="1.5"/>
 
   <!-- Category label -->
-  <text x="60" y="162" font-family="system-ui,-apple-system,sans-serif" font-size="15" font-weight="600" fill="#00e5a0" letter-spacing="3">ALAN ADI İZLEME</text>
+  <text x="60" y="188" font-family="system-ui,-apple-system,sans-serif" font-size="16" font-weight="600" fill="#00e5a0" letter-spacing="3">ALAN ADI İZLEME</text>
 
   <!-- Main headline -->
-  <text x="60" y="250" font-family="system-ui,-apple-system,sans-serif" font-size="76" font-weight="800" fill="#ffffff" letter-spacing="-2">Alan adlarınız,</text>
-  <text x="60" y="340" font-family="system-ui,-apple-system,sans-serif" font-size="76" font-weight="800" fill="#00e5a0" letter-spacing="-2">kontrol altında.</text>
+  <text x="60" y="310" font-family="system-ui,-apple-system,sans-serif" font-size="88" font-weight="800" fill="#ffffff" letter-spacing="-2">Alan adlarınız,</text>
+  <text x="60" y="415" font-family="system-ui,-apple-system,sans-serif" font-size="88" font-weight="800" fill="#00e5a0" letter-spacing="-2">kontrol altında.</text>
 
   <!-- Description -->
-  <rect x="60" y="375" width="3.5" height="65" fill="#00e5a0" rx="2" opacity="0.6"/>
-  <text x="82" y="400" font-family="system-ui,-apple-system,sans-serif" font-size="20" fill="#9999bb">80+ TLD, WHOIS izleme, SMTP e-posta bildirimleri.</text>
-  <text x="82" y="428" font-family="system-ui,-apple-system,sans-serif" font-size="20" fill="#9999bb">SQLite &amp; MySQL, web arayüzü ve <tspan font-family="monospace">dh</tspan> CLI aracı.</text>
+  <rect x="60" y="460" width="4" height="80" fill="#00e5a0" rx="2" opacity="0.55"/>
+  <text x="84" y="492" font-family="system-ui,-apple-system,sans-serif" font-size="22" fill="#9999bb">80+ TLD, WHOIS izleme,</text>
+  <text x="84" y="522" font-family="system-ui,-apple-system,sans-serif" font-size="22" fill="#9999bb">SMTP e-posta bildirimleri.</text>
 
   <!-- Tech pills -->
-  <g font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="600">
-    <rect x="60" y="470" width="82" height="28" rx="14" fill="#7a86c8" opacity="0.18"/>
-    <text x="101" y="489" fill="#aab0e8" text-anchor="middle">PHP 8.1+</text>
+  <g font-family="system-ui,-apple-system,sans-serif" font-size="15" font-weight="600">
+    <rect x="60"  y="590" width="96"  height="34" rx="17" fill="#7a86c8" opacity="0.18"/>
+    <text x="108" y="612" fill="#aab0e8" text-anchor="middle">PHP 8.1+</text>
 
-    <rect x="152" y="470" width="68" height="28" rx="14" fill="#00e5a0" opacity="0.12"/>
-    <text x="186" y="489" fill="#00e5a0" text-anchor="middle">Slim 4</text>
+    <rect x="166" y="590" width="80"  height="34" rx="17" fill="#00e5a0" opacity="0.12"/>
+    <text x="206" y="612" fill="#00e5a0" text-anchor="middle">Slim 4</text>
 
-    <rect x="230" y="470" width="130" height="28" rx="14" fill="#00b4d8" opacity="0.12"/>
-    <text x="295" y="489" fill="#00b4d8" text-anchor="middle">Symfony Console</text>
+    <rect x="256" y="590" width="150" height="34" rx="17" fill="#00b4d8" opacity="0.12"/>
+    <text x="331" y="612" fill="#00b4d8" text-anchor="middle">Symfony Console</text>
 
-    <rect x="370" y="470" width="52" height="28" rx="14" fill="#00b4d8" opacity="0.10"/>
-    <text x="396" y="489" fill="#88ccdd" text-anchor="middle">CLI</text>
+    <rect x="416" y="590" width="62"  height="34" rx="17" fill="#00b4d8" opacity="0.10"/>
+    <text x="447" y="612" fill="#88ccdd" text-anchor="middle">CLI</text>
 
-    <rect x="432" y="470" width="82" height="28" rx="14" fill="#9dbb00" opacity="0.15"/>
-    <text x="473" y="489" fill="#c8d84a" text-anchor="middle">GPL-3.0</text>
+    <rect x="488" y="590" width="96"  height="34" rx="17" fill="#9dbb00" opacity="0.15"/>
+    <text x="536" y="612" fill="#c8d84a" text-anchor="middle">GPL-3.0</text>
 
-    <rect x="524" y="470" width="106" height="28" rx="14" fill="#ff6b6b" opacity="0.12"/>
-    <text x="577" y="489" fill="#ff9999" text-anchor="middle">Açık Kaynak</text>
+    <rect x="594" y="590" width="124" height="34" rx="17" fill="#ff6b6b" opacity="0.12"/>
+    <text x="656" y="612" fill="#ff9999" text-anchor="middle">Açık Kaynak</text>
   </g>
 
   <!-- Footer divider -->
-  <rect x="60" y="550" width="1080" height="1" fill="#ffffff" opacity="0.08"/>
+  <rect x="60" y="1000" width="960" height="1" fill="#ffffff" opacity="0.08"/>
 
   <!-- Author -->
-  <text x="60" y="592" font-family="system-ui,-apple-system,sans-serif" font-size="17" font-weight="700" fill="#ffffff">Bahri Meriç Canlı</text>
-  <text x="235" y="592" font-family="system-ui,-apple-system,sans-serif" font-size="17" fill="#555577">· bahricanli.tr</text>
+  <text x="60"  y="1046" font-family="system-ui,-apple-system,sans-serif" font-size="19" font-weight="700" fill="#ffffff">Bahri Meriç Canlı</text>
+  <text x="258" y="1046" font-family="system-ui,-apple-system,sans-serif" font-size="19" fill="#555577">· bahricanli.tr</text>
 
   <!-- Site URL -->
-  <text x="1140" y="592" font-family="system-ui,-apple-system,sans-serif" font-size="17" font-weight="600" fill="#00e5a0" text-anchor="end">domainhunter.tr</text>
+  <text x="1020" y="1046" font-family="system-ui,-apple-system,sans-serif" font-size="19" font-weight="600" fill="#00e5a0" text-anchor="end">domainhunter.tr</text>
 </svg>

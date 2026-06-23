@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Domain Hunter v2.0.0 – Приложение с открытым исходным кодом для мониторинга доменов. Веб-интерфейс, CLI, 80+ TLD, SQLite/MySQL, PHP 8.1+" />
+  <meta name="author" content="Bahri Meriç CANLI" />
+  <title>Domain Hunter v2.0.0 – Мониторинг доменов</title>
+
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080d18;
+      --bg2:     #0f1624;
+      --bg3:     #172035;
+      --accent:  #00e5a0;
+      --accent2: #00b4d8;
+      --accent3: #7c3aed;
+      --text:    #e2e8f0;
+      --muted:   #94a3b8;
+      --border:  rgba(255,255,255,0.08);
+      --radius:  12px;
+      --shadow:  0 24px 64px rgba(0,0,0,0.55);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: #fff; }
+
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 96px 0; }
+    .section-alt { background: var(--bg2); }
+
+    .tag {
+      display: inline-block;
+      background: rgba(0,229,160,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(0,229,160,0.3);
+      border-radius: 99px;
+      padding: 4px 14px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h2.st {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 750;
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+
+    .sub { color: var(--muted); font-size: 1.05rem; max-width: 560px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px; border-radius: 9px;
+      font-weight: 650; font-size: 0.92rem;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-p {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #060b15;
+    }
+    .btn-p:hover { opacity: 0.85; transform: translateY(-1px); color: #060b15; }
+    .btn-o {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-o:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,160,0.06); }
+    .btn-lg { padding: 14px 30px; font-size: 1rem; border-radius: 10px; }
+
+    /* ── Navbar ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 14px 0;
+      background: rgba(8,13,24,0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.15rem; font-weight: 750; color: #fff;
+      white-space: nowrap;
+    }
+
+    .logo-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 28px; list-style: none;
+    }
+    .nav-links a { color: var(--muted); font-size: 0.88rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+
+    /* Language switcher */
+    .lang-switcher {
+      display: flex; gap: 4px; align-items: center;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+      font-family: inherit;
+    }
+    .lang-btn:hover { color: var(--accent); border-color: rgba(0,229,160,0.3); }
+    .lang-btn.active {
+      color: var(--accent);
+      border-color: rgba(0,229,160,0.4);
+      background: rgba(0,229,160,0.08);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 130px 0 90px;
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; top: -30%; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(0,229,160,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,229,160,0.09);
+      border: 1px solid rgba(0,229,160,0.22);
+      border-radius: 99px; padding: 6px 16px;
+      font-size: 0.78rem; color: var(--accent); font-weight: 600;
+      margin-bottom: 22px;
+    }
+
+    .pulse {
+      width: 7px; height: 7px;
+      background: var(--accent); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:.45; transform:scale(.8); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 800; line-height: 1.1;
+      margin-bottom: 22px; letter-spacing: -0.02em;
+    }
+
+    .hl {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc { font-size: 1.1rem; color: var(--muted); margin-bottom: 36px; max-width: 480px; }
+
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .hero-stats {
+      display: flex; gap: 28px; flex-wrap: wrap;
+      margin-top: 44px; padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+    .stat-num { font-size: 1.7rem; font-weight: 750; color: #fff; line-height: 1; }
+    .stat-lbl { color: var(--muted); font-size: 0.78rem; margin-top: 3px; }
+
+    /* Terminal */
+    .terminal {
+      background: #0c1220;
+      border: 1px solid rgba(0,229,160,0.18);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow), 0 0 80px rgba(0,229,160,0.05);
+      overflow: hidden;
+      font-family: 'Fira Code','Courier New',monospace;
+    }
+
+    .term-bar {
+      background: #141d2e;
+      padding: 11px 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .term-dots { display: flex; gap: 6px; }
+    .term-dots span { width: 11px; height: 11px; border-radius: 50%; }
+    .td-r{background:#ff5f56;} .td-y{background:#ffbd2e;} .td-g{background:#27c93f;}
+    .term-title { flex:1; text-align:center; font-size:0.73rem; color:#555; }
+
+    .term-body { padding: 18px 20px; font-size: 0.8rem; line-height: 1.9; }
+    .tc-g{color:#00e5a0;} .tc-b{color:#79c0ff;} .tc-y{color:#e3b341;}
+    .tc-m{color:#6e7681;} .tc-w{color:#c9d1d9;} .tc-r{color:#f47067;} .tc-v{color:#d2a8ff;}
+
+    .cursor {
+      display: inline-block; width: 7px; height: 13px;
+      background: var(--accent); vertical-align: middle;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+    /* ── What's New ── */
+    .whats-new-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+      margin-top: 52px;
+    }
+
+    .new-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .new-card:hover { border-color: rgba(0,229,160,0.28); transform: translateY(-3px); }
+
+    .new-card .v-badge {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(0,229,160,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(0,229,160,0.25);
+      font-size: 0.68rem; font-weight: 700;
+      padding: 2px 9px; border-radius: 99px;
+    }
+
+    .new-card h3 { font-size: 1rem; font-weight: 650; color:#fff; margin-bottom: 8px; }
+    .new-card p { color: var(--muted); font-size: 0.875rem; line-height: 1.6; }
+
+    /* ── Features ── */
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr));
+      gap: 20px; margin-top: 52px;
+    }
+
+    .feat-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px;
+      transition: all 0.22s;
+      position: relative; overflow: hidden;
+    }
+    .feat-card::before {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg,rgba(0,229,160,0.04),transparent);
+      opacity:0; transition: opacity 0.22s;
+    }
+    .feat-card:hover { border-color: rgba(0,229,160,0.28); transform: translateY(-4px); }
+    .feat-card:hover::before { opacity:1; }
+
+    .feat-icon {
+      width:48px; height:48px;
+      background: linear-gradient(135deg,rgba(0,229,160,0.14),rgba(0,180,216,0.14));
+      border: 1px solid rgba(0,229,160,0.18);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 18px;
+    }
+    .feat-card h3 { font-size:0.98rem; font-weight:650; color:#fff; margin-bottom:8px; }
+    .feat-card p  { color:var(--muted); font-size:0.875rem; line-height:1.6; }
+
+    /* ── CLI Section ── */
+    .cli-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: start;
+      margin-top: 52px;
+    }
+
+    .cli-commands { display: flex; flex-direction: column; gap: 12px; }
+
+    .cmd-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 9px; padding: 14px 18px;
+      transition: border-color 0.2s;
+    }
+    .cmd-row:hover { border-color: rgba(0,229,160,0.28); }
+    .cmd-code { font-family: monospace; font-size: 0.82rem; color: var(--accent); white-space: nowrap; min-width: 160px; }
+    .cmd-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+
+    /* ── TLD ── */
+    .tld-box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-top: 52px;
+    }
+
+    .tld-scroll {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;
+    }
+
+    .tld-pill {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 11px;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: var(--accent2);
+    }
+
+    /* ── Tech Stack ── */
+    .tech-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+      gap: 16px; margin-top: 52px;
+    }
+
+    .tech-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      display: flex; align-items: center; gap: 14px;
+      transition: border-color 0.2s;
+    }
+    .tech-card:hover { border-color: rgba(0,229,160,0.28); }
+    .tech-card .t-icon { font-size: 1.6rem; }
+    .tech-card .t-name { font-size: 0.88rem; font-weight: 650; color: #fff; }
+    .tech-card .t-ver  { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── Install ── */
+    .install-tabs {
+      display: flex; gap: 0; margin-top: 52px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .itab {
+      padding: 10px 20px; font-size: 0.88rem; font-weight: 600;
+      color: var(--muted); cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      background: none; border-top: none; border-left: none; border-right: none;
+      font-family: inherit;
+    }
+    .itab:hover { color: var(--text); }
+    .itab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    .iblock { display: none; }
+    .iblock.active { display: block; }
+
+    .code-block {
+      background: #0c1220;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      font-family: 'Fira Code','Courier New',monospace;
+      font-size: 0.82rem;
+      line-height: 1.9;
+      overflow-x: auto;
+    }
+
+    .code-block .cm { color: var(--muted); }
+    .code-block .ck { color: var(--accent2); }
+    .code-block .cv { color: var(--accent); }
+    .code-block .cs { color: #e3b341; }
+
+    /* ── Languages (Site) ── */
+    .lang-grid {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px;
+    }
+    .lang-pill2 {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 99px; padding: 7px 18px;
+      font-size: 0.85rem; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+      transition: border-color 0.2s;
+    }
+    .lang-pill2:hover { border-color: rgba(0,229,160,0.3); color: var(--text); }
+    .lang-pill2.site-lang { border-color: rgba(0,229,160,0.3); color: var(--accent); }
+
+    /* ── About ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 72px; align-items: center;
+    }
+
+    .profile-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px;
+    }
+
+    .p-head {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px; background: var(--bg2);
+      border-radius: 9px; margin-bottom: 14px;
+    }
+    .avatar {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .p-name { font-weight: 700; color: #fff; font-size: 0.98rem; }
+    .p-role { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+
+    .meta-rows { display: flex; flex-direction: column; gap: 9px; }
+    .meta-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 14px; background: var(--bg2); border-radius: 7px;
+      font-size: 0.83rem;
+    }
+    .meta-row .ml { color: var(--muted); }
+    .meta-row .mv { color: #fff; font-weight: 550; }
+
+    /* ── CTA ── */
+    .cta-box {
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+      border: 1px solid rgba(0,229,160,0.18);
+      border-radius: 20px; padding: 64px 48px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; top:-60%; left:50%; transform:translateX(-50%);
+      width:600px; height:600px;
+      background: radial-gradient(circle, rgba(0,229,160,0.06) 0%, transparent 70%);
+    }
+    .cta-box h2 { font-size: clamp(1.6rem,3vw,2.3rem); font-weight:750; margin-bottom:14px; }
+    .cta-box p  { color:var(--muted); font-size:1.02rem; margin-bottom:32px; }
+    .cta-btns   { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 48px 0 28px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px; margin-bottom: 36px;
+    }
+    .footer-brand .fl {
+      display: flex; align-items: center; gap: 9px;
+      font-weight:750; font-size:1.08rem; color:#fff; margin-bottom:10px;
+    }
+    .footer-brand p { color:var(--muted); font-size:0.85rem; line-height:1.65; max-width:290px; }
+    .footer-col h4 {
+      color:#fff; font-size:0.82rem; font-weight:700;
+      margin-bottom:14px; text-transform:uppercase; letter-spacing:0.07em;
+    }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:9px; }
+    .footer-col ul a { color:var(--muted); font-size:0.85rem; transition:color 0.18s; }
+    .footer-col ul a:hover { color:var(--accent); }
+    .footer-bottom {
+      border-top:1px solid var(--border); padding-top:22px;
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap; gap:10px;
+    }
+    .footer-bottom p { color:var(--muted); font-size:0.8rem; }
+    .gpl {
+      display:inline-flex; align-items:center; gap:5px;
+      background:rgba(0,229,160,0.09); border:1px solid rgba(0,229,160,0.22);
+      color:var(--accent); border-radius:6px; padding:3px 10px;
+      font-size:0.75rem; font-weight:700;
+    }
+
+    /* ── Reveal ── */
+    .reveal { opacity:0; transform:translateY(26px); transition:opacity 0.58s ease,transform 0.58s ease; }
+    .reveal.vis { opacity:1; transform:none; }
+
+    /* ── Responsive ── */
+    @media(max-width:900px){
+      .hero-grid,.about-grid,.cli-grid,.whats-new-grid{ grid-template-columns:1fr; }
+      .hero-visual{ display:none; }
+      .footer-grid{ grid-template-columns:1fr 1fr; }
+    }
+    @media(max-width:640px){
+      .nav-links{ display:none; }
+      .footer-grid{ grid-template-columns:1fr; }
+      .hero-stats{ gap:18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="container nav-inner">
+    <a class="nav-logo" href="#">
+      <img src="logo.svg" alt="Domain Hunter" width="112" height="46" style="display:block;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#whats-new" data-i18n="nav_new">Yenilikler</a></li>
+      <li><a href="#features" data-i18n="nav_feat">Özellikler</a></li>
+      <li><a href="#cli" data-i18n="nav_cli">CLI</a></li>
+      <li><a href="#install" data-i18n="nav_install">Kurulum</a></li>
+      <li><a href="#about" data-i18n="nav_about">Hakkında</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="tr">TR</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="pt">PT</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+        <button class="lang-btn" data-lang="zh">ZH</button>
+        <button class="lang-btn" data-lang="ja">JA</button>
+      </div>
+      <a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener" class="btn btn-o" style="padding:8px 16px;font-size:0.83rem;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="reveal">
+        <div class="hero-badge">
+          <span class="pulse"></span>
+          <span data-i18n="hero_badge">v2.0.0 · Tamamen Yeniden Yazıldı · GPL-3.0</span>
+        </div>
+        <h1>
+          <span data-i18n="hero_h1a">Domainlerinizi</span><br/>
+          <span class="hl" data-i18n="hero_h1b">Akıllıca İzleyin.</span><br/>
+          <span data-i18n="hero_h1c">Kaçırmayın.</span>
+        </h1>
+        <p class="hero-desc" data-i18n="hero_desc">
+          Web arayüzü ve güçlü CLI ile 80'den fazla TLD'yi izleyin,
+          WHOIS değişikliklerini anlık takip edin, e-posta bildirimleri alın.
+          PHP 8.1+ ile sıfırdan yeniden yazıldı.
+        </p>
+        <div class="hero-cta">
+          <a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener" class="btn btn-p">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span data-i18n="hero_btn1">İndir / Klonla</span>
+          </a>
+          <a href="#features" class="btn btn-o">
+            <span data-i18n="hero_btn2">Özellikleri Gör</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">2.0.0</div>
+            <div class="stat-lbl" data-i18n="stat1">Sürüm</div>
+          </div>
+          <div>
+            <div class="stat-num">80+</div>
+            <div class="stat-lbl" data-i18n="stat2">TLD Desteği</div>
+          </div>
+          <div>
+            <div class="stat-num">PHP 8.1</div>
+            <div class="stat-lbl" data-i18n="stat3">Minimum</div>
+          </div>
+          <div>
+            <div class="stat-num">GPL</div>
+            <div class="stat-lbl" data-i18n="stat4">Lisans</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal -->
+      <div class="hero-visual reveal">
+        <div class="terminal">
+          <div class="term-bar">
+            <div class="term-dots">
+              <span class="td-r"></span><span class="td-y"></span><span class="td-g"></span>
+            </div>
+            <div class="term-title">dh — domain-hunter v2.0.0</div>
+          </div>
+          <div class="term-body">
+            <div><span class="tc-y">
+<pre>
+  #      ##      #       _                _      
+ ###    ####    ###   __| |___ _ __  __ _(_)_ _  
+ ###     ##     ###  / _` / _ \ '  \/ _` | | ' \ 
+ ##      ##      ##  \__,_\___/_|_|_\__,_|_|_||_|
+ ##      ##      ##   _            _           
+  ##     ##     ##   | |_ _  _ _ _| |_ ___ _ _ 
+   ##    ##    ##    | ' \ || | ' \  _/ -_) '_|
+    ############     |_||_\_,_|_||_\__\___|_|  
+</pre></span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-w">  Domain Hunter (c) 2006 - 2026 Bahri Meriç Canlı</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-m">$</span> <span class="tc-g">dh</span> <span class="tc-b">domain:list</span> <span class="tc-v">--order=expiry</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-y">ID  Domain               Expiry       Status</span></div>
+            <div><span class="tc-m">─── ──────────────────── ──────────── ──────────</span></div>
+            <div><span class="tc-w"> 1  example.com          2027-03-15   </span><span class="tc-g">ACTIVE</span></div>
+            <div><span class="tc-w"> 2  mysite.net           2026-07-01   </span><span class="tc-y">EXPIRING</span></div>
+            <div><span class="tc-w"> 3  turkish.com.tr       2025-12-20   </span><span class="tc-r">EXPIRED</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-m">$</span> <span class="tc-g">dh</span> <span class="tc-b">domain:refresh</span> <span class="tc-v">mysite.net</span></div>
+            <div><span class="tc-b">📡 WHOIS güncellendi → e-posta gönderildi</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-m">$</span> <span class="tc-g">dh</span> <span class="tc-b">domain:list</span> <span class="tc-v">--format=csv</span></div>
+            <div><span class="tc-g">✔ domains.csv oluşturuldu (3 kayıt)</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-m">$</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT'S NEW ── -->
+<section class="section section-alt" id="whats-new">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag" data-i18n="new_tag">v2.0.0 Yenilikleri</div>
+      <h2 class="st" data-i18n="new_h2">Sıfırdan Yeniden Yazıldı</h2>
+      <p class="sub" data-i18n="new_sub">2011'deki orijinal koddan geriye yalnızca fikir kaldı. Her şey modern PHP mimarisiyle yeniden inşa edildi.</p>
+    </div>
+
+    <div class="whats-new-grid">
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n1_h">Slim 4 Web Arayüzü</h3>
+        <p data-i18n="n1_p">PSR-7/PSR-15 uyumlu Slim 4 micro-framework ve Twig 3 şablonlama motoru. Temiz, hızlı ve genişletilebilir web paneli.</p>
+      </div>
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n2_h">Symfony Console CLI</h3>
+        <p data-i18n="n2_p"><code>dh</code> veya <code>domainhunter</code> komutuyla tam CLI desteği. Domain ekleme, listeleme, WHOIS yenileme, silme ve CSV dışa aktarım.</p>
+      </div>
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n3_h">SQLite &amp; MySQL Desteği</h3>
+        <p data-i18n="n3_p">SQLite ile sıfır konfigürasyonlu başlangıç. Üretim ortamları için MySQL desteği. PDO prepared statement güvenliği.</p>
+      </div>
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n4_h">PHAR Tek Dosya Dağıtımı</h3>
+        <p data-i18n="n4_p">Tek satır curl komutuyla PHAR arşivi indirin ve CLI'yi anında kullanmaya başlayın. Composer gerektirmez.</p>
+      </div>
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n5_h">80+ TLD &amp; IDN Desteği</h3>
+        <p data-i18n="n5_p">Tüm .tr uzantıları dahil 80'den fazla TLD. Punycode/IDN ile ASCII olmayan uluslararası domain desteği.</p>
+      </div>
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n6_h">Symfony Mailer 7 – SMTP Desteği</h3>
+        <p data-i18n="n6_p">PHP native <code>mail()</code> yerine Symfony Mailer 7 ile SMTP, Gmail ve TLS desteği. <code>MAILER_DSN</code> ayarıyla yapılandırın; SMTP tanımlı değilse otomatik olarak <code>mail()</code>'e düşer.</p>
+      </div>
+      <div class="new-card reveal">
+        <span class="v-badge">YENİ</span>
+        <h3 data-i18n="n7_h">PHP 8.1+ Modern Mimari</h3>
+        <p data-i18n="n7_p">Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv konfigürasyonu. Deprecated mysql_* fonksiyonları tamamen kaldırıldı.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag" data-i18n="feat_tag">Özellikler</div>
+      <h2 class="st" data-i18n="feat_h2">Her İhtiyacınız Karşılandı</h2>
+      <p class="sub" data-i18n="feat_sub">Domain Hunter v2.0.0, alan adı yönetimini basit ve güçlü hale getiren kapsamlı özellikler sunar.</p>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">📡</div>
+        <h3 data-i18n="f1_h">Otomatik Domain İzleme</h3>
+        <p data-i18n="f1_p">Cron uyumlu otomasyon ile domainleriniz periyodik olarak kontrol edilir. Kayıt, son kullanma ve güncelleme tarihleri takip edilir.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📧</div>
+        <h3 data-i18n="f2_h">SMTP E-posta Bildirimleri</h3>
+        <p data-i18n="f2_p">Symfony Mailer 7 ile SMTP, Gmail veya TLS üzerinden e-posta bildirimleri. <code>MAILER_DSN</code> ile tek satırda yapılandırın; fallback olarak PHP <code>mail()</code> de desteklenir.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🖥️</div>
+        <h3 data-i18n="f3_h">Web Paneli</h3>
+        <p data-i18n="f3_p">Slim 4 + Twig 3 tabanlı modern web arayüzü. Domainleri listeleyin, sıralayın, WHOIS bilgilerine anında erişin.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">⌨️</div>
+        <h3 data-i18n="f4_h">Güçlü CLI</h3>
+        <p data-i18n="f4_p">Symfony Console 7 tabanlı komut satırı arayüzü. Script ve cron entegrasyonu için mükemmel.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🌍</div>
+        <h3 data-i18n="f5_h">80+ TLD Desteği</h3>
+        <p data-i18n="f5_p">.com .net .tr .com.tr .net.tr .de .uk .fr ve daha fazlası. Türkiye dahil dünya genelindeki tüm yaygın uzantılar.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🔤</div>
+        <h3 data-i18n="f6_h">IDN / Punycode</h3>
+        <p data-i18n="f6_p">Uluslararası domain adları (IDN) için Punycode desteği. Türkçe ve diğer dillerdeki özel karakterli domainler sorunsuz çalışır.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🗄️</div>
+        <h3 data-i18n="f7_h">SQLite &amp; MySQL</h3>
+        <p data-i18n="f7_p">Geliştirme için SQLite (sıfır kurulum), üretim için MySQL. PDO prepared statement ile güvenli veritabanı erişimi.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📦</div>
+        <h3 data-i18n="f8_h">PHAR Dağıtımı</h3>
+        <p data-i18n="f8_p">Tek bir PHAR dosyasıyla CLI'yi anında kullanın. Composer kurulumu gerektirmez; hızlı başlangıç için idealdir.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📊</div>
+        <h3 data-i18n="f9_h">CSV Dışa Aktarım</h3>
+        <p data-i18n="f9_p">Tüm domain listenizi CSV formatında dışa aktarın. Spreadsheet ve diğer araçlarla kolay entegrasyon sağlayın.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLI ── -->
+<section class="section section-alt" id="cli">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag">CLI</div>
+      <h2 class="st" data-i18n="cli_h2">Komut Satırından Tam Kontrol</h2>
+      <p class="sub" data-i18n="cli_sub">Symfony Console 7 tabanlı CLI ile tüm işlemleri terminalden yönetin. Cron entegrasyonu ile otomasyona hazır.</p>
+    </div>
+
+    <div class="cli-grid">
+      <div class="cli-commands reveal">
+        <div class="cmd-row">
+          <span class="cmd-code">dh domain:add</span>
+          <span class="cmd-desc" data-i18n="cmd1">Yeni bir domain ekler ve WHOIS bilgisini kaydeder.</span>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-code">dh domain:list</span>
+          <span class="cmd-desc" data-i18n="cmd2">Tüm domainleri listeler. <code>--order=expiry</code> ile son kullanma tarihine, <code>--format=csv</code> ile CSV olarak dışa aktarır.</span>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-code">dh domain:refresh</span>
+          <span class="cmd-desc" data-i18n="cmd3">Tüm veya belirtilen domain için WHOIS sorgusunu yeniler ve değişiklikleri kaydeder.</span>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-code">dh domain:delete</span>
+          <span class="cmd-desc" data-i18n="cmd4">Bir veya birden fazla domaini izleme listesinden siler.</span>
+        </div>
+        <div class="cmd-row">
+          <span class="cmd-code">bin/cron.php</span>
+          <span class="cmd-desc" data-i18n="cmd6">Otomatik WHOIS izleme için cron job betiği. Değişikliklerde e-posta gönderir.</span>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="terminal">
+          <div class="term-bar">
+            <div class="term-dots">
+              <span class="td-r"></span><span class="td-y"></span><span class="td-g"></span>
+            </div>
+            <div class="term-title">bash</div>
+          </div>
+          <div class="term-body">
+            <div><span class="tc-m"># PHAR ile hızlı kurulum (dh.phar)</span></div>
+            <div><span class="tc-m">$</span> <span class="tc-b">curl</span> -sLO https://github.com/bmericc/<br>&nbsp;&nbsp;domainhunter/releases/latest/<br>&nbsp;&nbsp;download/dh.phar</div>
+            <div><span class="tc-m">$</span> <span class="tc-b">chmod</span> +x dh.phar</div>
+            <div>&nbsp;</div>
+            <div><span class="tc-m"># Domain ekle</span></div>
+            <div><span class="tc-m">$</span> <span class="tc-g">dh</span> <span class="tc-b">domain:add</span> <span class="tc-y">example.com</span></div>
+            <div><span class="tc-g">✔ example.com eklendi</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-m"># Cron için (her gün 08:00)</span></div>
+            <div><span class="tc-y">0 8 * * * php /path/bin/cron.php</span></div>
+            <div>&nbsp;</div>
+            <div><span class="tc-m">$</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TLD ── -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag" data-i18n="tld_tag">TLD Desteği</div>
+      <h2 class="st" data-i18n="tld_h2">80+ Alan Adı Uzantısı</h2>
+      <p class="sub" data-i18n="tld_sub">Türkiye'nin tüm .tr uzantıları dahil dünya genelindeki yaygın TLD'ler desteklenir.</p>
+    </div>
+    <div class="tld-box reveal">
+      <div class="tld-scroll">
+        <span class="tld-pill">.com</span><span class="tld-pill">.net</span><span class="tld-pill">.org</span>
+        <span class="tld-pill">.tr</span><span class="tld-pill">.com.tr</span><span class="tld-pill">.net.tr</span>
+        <span class="tld-pill">.org.tr</span><span class="tld-pill">.edu.tr</span><span class="tld-pill">.gov.tr</span>
+        <span class="tld-pill">.bel.tr</span><span class="tld-pill">.de</span><span class="tld-pill">.uk</span>
+        <span class="tld-pill">.co.uk</span><span class="tld-pill">.fr</span><span class="tld-pill">.es</span>
+        <span class="tld-pill">.it</span><span class="tld-pill">.nl</span><span class="tld-pill">.pl</span>
+        <span class="tld-pill">.ru</span><span class="tld-pill">.io</span><span class="tld-pill">.co</span>
+        <span class="tld-pill">.info</span><span class="tld-pill">.biz</span><span class="tld-pill">.mobi</span>
+        <span class="tld-pill">.eu</span><span class="tld-pill">.us</span><span class="tld-pill">.ca</span>
+        <span class="tld-pill">.au</span><span class="tld-pill">.jp</span><span class="tld-pill">.cn</span>
+        <span class="tld-pill">.br</span><span class="tld-pill">.mx</span><span class="tld-pill">.ar</span>
+        <span class="tld-pill">.cz</span><span class="tld-pill">.sk</span><span class="tld-pill">.hu</span>
+        <span class="tld-pill">.ro</span><span class="tld-pill">.bg</span><span class="tld-pill">.gr</span>
+        <span class="tld-pill">.pt</span><span class="tld-pill">.se</span><span class="tld-pill">.no</span>
+        <span class="tld-pill">.fi</span><span class="tld-pill">.dk</span><span class="tld-pill">.be</span>
+        <span class="tld-pill">.at</span><span class="tld-pill">.ch</span><span class="tld-pill">.app</span>
+        <span class="tld-pill">.dev</span><span class="tld-pill">.tech</span><span class="tld-pill">.online</span>
+        <span class="tld-pill">.store</span><span class="tld-pill">.shop</span><span class="tld-pill">.cloud</span>
+        <span class="tld-pill" style="opacity:.5">+ daha fazlası...</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TECH STACK ── -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag" data-i18n="tech_tag">Teknoloji</div>
+      <h2 class="st" data-i18n="tech_h2">Modern Mimari</h2>
+      <p class="sub" data-i18n="tech_sub">PHP ekosisteminin en güncel ve güvenilir bileşenleri kullanılarak tamamen yeniden inşa edildi.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <span class="t-icon">🐘</span>
+        <div><div class="t-name">PHP</div><div class="t-ver">8.1+</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">🚀</span>
+        <div><div class="t-name">Slim Framework</div><div class="t-ver">4.x · PSR-7/15</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">🌿</span>
+        <div><div class="t-name">Twig</div><div class="t-ver">3.x · Templating</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">⚡</span>
+        <div><div class="t-name">Symfony Console</div><div class="t-ver">7.x · CLI</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">✉️</span>
+        <div><div class="t-name">Symfony Mailer</div><div class="t-ver">7.x · SMTP / Gmail</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">💉</span>
+        <div><div class="t-name">PHP-DI</div><div class="t-ver">7.x · DI Container</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">🗄️</span>
+        <div><div class="t-name">PDO</div><div class="t-ver">SQLite · MySQL</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">⚙️</span>
+        <div><div class="t-name">phpdotenv</div><div class="t-ver">.env Konfigürasyon</div></div>
+      </div>
+      <div class="tech-card reveal">
+        <span class="t-icon">📦</span>
+        <div><div class="t-name">Composer</div><div class="t-ver">Bağımlılık Yönetimi</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INSTALL ── -->
+<section class="section" id="install">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag" data-i18n="ins_tag">Kurulum</div>
+      <h2 class="st" data-i18n="ins_h2">Dakikalar İçinde Başlayın</h2>
+      <p class="sub" data-i18n="ins_sub">İki farklı kurulum yöntemi: tam web+CLI kurulumu veya hızlı PHAR ile yalnızca CLI.</p>
+    </div>
+
+    <div class="install-tabs reveal">
+      <button class="itab active" data-tab="composer" data-i18n="tab1">Composer (Tam Kurulum)</button>
+      <button class="itab" data-tab="phar" data-i18n="tab2">PHAR (Hızlı CLI)</button>
+    </div>
+
+    <div class="iblock active reveal" id="tab-composer">
+      <div class="code-block">
+        <div><span class="cm"># 1. Repoyu klonla</span></div>
+        <div><span class="ck">git</span> <span class="cv">clone</span> https://github.com/bmericc/domainhunter.git</div>
+        <div><span class="ck">cd</span> <span class="cv">domainhunter</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># 2. Bağımlılıkları yükle</span></div>
+        <div><span class="ck">composer</span> <span class="cv">install</span> <span class="cs">--no-dev</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># 3. Konfigürasyonu ayarla</span></div>
+        <div><span class="ck">cp</span> <span class="cv">.env.example .env</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># .env içeriği (önemli ayarlar):</span></div>
+        <div><span class="cs">DB_DRIVER</span>=<span class="cv">sqlite</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># veya mysql</span></div>
+        <div><span class="cs">ALERT_EMAIL</span>=<span class="cv">admin@example.com</span></div>
+        <div><span class="cs">MAILER_FROM</span>=<span class="cv">noreply@example.com</span></div>
+        <div><span class="cm"># SMTP (Symfony Mailer DSN):</span></div>
+        <div><span class="cs">MAILER_DSN</span>=<span class="cv">smtp://user:pass@smtp.example.com:587</span></div>
+        <div><span class="cs">MAILER_DSN</span>=<span class="cv">smtp://user:pass@smtp.gmail.com:465?encryption=tls</span></div>
+        <div><span class="cs">MAILER_DSN</span>=<span class="cv">native://default</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># PHP mail() fallback</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># 4. Veritabanını oluştur</span></div>
+        <div><span class="ck">php</span> <span class="cv">bin/migrate.php</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># 5. Web sunucusunu başlat (geliştirme)</span></div>
+        <div><span class="ck">php</span> <span class="cv">-S localhost:8080 -t public/</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># 6. CLI'yi kullan</span></div>
+        <div><span class="ck">./bin/dh</span> <span class="cv">list</span></div>
+      </div>
+    </div>
+
+    <div class="iblock reveal" id="tab-phar">
+      <div class="code-block">
+        <div><span class="cm"># PHAR dosyasını indir (dh.phar)</span></div>
+        <div><span class="ck">curl</span> <span class="cs">-sLO</span> https://github.com/bmericc/domainhunter/releases/latest/download/dh.phar</div>
+        <div><span class="ck">chmod</span> <span class="cv">+x dh.phar</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># Konfigürasyon</span></div>
+        <div><span class="ck">cp</span> <span class="cv">.env.example .env</span> <span class="cm">&amp;&amp; nano .env</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># Kullan</span></div>
+        <div><span class="ck">php</span> <span class="cv">dh.phar domain:add example.com</span></div>
+        <div><span class="ck">php</span> <span class="cv">dh.phar domain:list --order=expiry</span></div>
+        <div><span class="ck">php</span> <span class="cv">dh.phar domain:list --format=csv</span></div>
+        <div>&nbsp;</div>
+        <div><span class="cm"># Cron (her sabah 08:00)</span></div>
+        <div><span class="cs">0 8 * * * php /path/to/dh.phar domain:refresh</span></div>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:24px;">
+      <p style="color:var(--muted);font-size:0.88rem;">
+        <strong style="color:var(--text)" data-i18n="req_h">Gereksinimler:</strong>
+        <span data-i18n="req_p">PHP 8.1+, ext-intl (IDN/Punycode), ext-pdo, ext-sqlite3 veya MySQL, Composer (tam kurulum için)</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="section section-alt" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="tag" data-i18n="ab_tag">Hakkında</div>
+        <h2 class="st" data-i18n="ab_h2">Proje Hakkında</h2>
+        <p style="color:var(--muted);margin-bottom:18px;" data-i18n="ab_p1">
+          Domain Hunter, 2006 yılında Türkiye'den yazılım geliştirici
+          <strong style="color:#fff">Bahri Meriç CANLI</strong> tarafından başlatılmış
+          açık kaynaklı bir projedir. 2026'da v2.0.0 ile sıfırdan yeniden yazıldı.
+        </p>
+        <p style="color:var(--muted);margin-bottom:18px;" data-i18n="ab_p2">
+          v2.0.0, 2011'deki orijinal PHP 4/5 kodunun tamamen yerini alan modern
+          bir yeniden yazımdır. Slim 4, Twig 3, Symfony Console ve PHP 8.1+
+          özellikleriyle inşa edilmiştir.
+        </p>
+        <p style="color:var(--muted);" data-i18n="ab_p3">
+          Proje; SourceForge ve GitHub üzerinden dağıtılmakta olup
+          GNU GPL v3.0 lisansıyla tamamen özgür yazılım olarak sunulmaktadır.
+        </p>
+
+        <div style="margin-top:28px;">
+          <div class="tag" style="margin-bottom:12px;" data-i18n="lang_tag">Bu Sitenin Dilleri</div>
+          <div class="lang-grid">
+            <div class="lang-pill2 site-lang"><span>🇹🇷</span> Türkçe</div>
+            <div class="lang-pill2 site-lang"><span>🇬🇧</span> English</div>
+            <div class="lang-pill2 site-lang"><span>🇩🇪</span> Deutsch</div>
+            <div class="lang-pill2 site-lang"><span>🇪🇸</span> Español</div>
+            <div class="lang-pill2 site-lang"><span>🇧🇷</span> Português</div>
+            <div class="lang-pill2 site-lang"><span>🇷🇺</span> Русский</div>
+            <div class="lang-pill2 site-lang"><span>🇨🇳</span> 中文</div>
+            <div class="lang-pill2 site-lang"><span>🇯🇵</span> 日本語</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-card reveal">
+        <div class="p-head">
+          <div class="avatar">👨‍💻</div>
+          <div>
+            <div class="p-name">Bahri Meriç CANLI</div>
+            <div class="p-role" data-i18n="p_role">Proje Kurucusu &amp; Geliştirici · Türkiye</div>
+          </div>
+        </div>
+        <div class="meta-rows">
+          <div class="meta-row"><span class="ml" data-i18n="m1k">Proje</span><span class="mv">Domain Hunter</span></div>
+          <div class="meta-row"><span class="ml" data-i18n="m2k">Sürüm</span><span class="mv">v2.0.0 (2026)</span></div>
+          <div class="meta-row"><span class="ml" data-i18n="m3k">İlk Sürüm</span><span class="mv">2006</span></div>
+          <div class="meta-row"><span class="ml" data-i18n="m4k">Lisans</span><span class="mv">GNU GPL v3.0</span></div>
+          <div class="meta-row"><span class="ml" data-i18n="m5k">Dil (Kod)</span><span class="mv">PHP %82 · Twig %18</span></div>
+          <div class="meta-row"><span class="ml" data-i18n="m6k">Platform</span><span class="mv">GitHub · SourceForge</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="section" id="download">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="tag" data-i18n="cta_tag">İndir &amp; Kullan</div>
+      <h2 data-i18n="cta_h2">Domain Hunter v2.0.0'ı Deneyin</h2>
+      <p data-i18n="cta_p">Açık kaynak, özgür ve ücretsiz. Composer veya tek PHAR dosyasıyla dakikalar içinde başlayın.</p>
+      <div class="cta-btns">
+        <a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener" class="btn btn-p btn-lg">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span data-i18n="cta_btn1">GitHub'dan İndir</span>
+        </a>
+        <a href="https://sourceforge.net/projects/domainhunter/" target="_blank" rel="noopener" class="btn btn-o btn-lg">
+          <span data-i18n="cta_btn2">SourceForge</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="fl">
+          <img src="logo.svg" alt="Domain Hunter" width="100" height="41" style="display:block;">
+        </div>
+        <p data-i18n="footer_desc">Alan adlarınızı izleyin, değişikliklerden anında haberdar olun. Açık kaynaklı, özgür yazılım — v2.0.0.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="fc1_h">Proje</h4>
+        <ul>
+          <li><a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://sourceforge.net/projects/domainhunter/" target="_blank" rel="noopener">SourceForge</a></li>
+          <li><a href="https://github.com/bmericc/domainhunter/releases" target="_blank" rel="noopener" data-i18n="fc1_rel">Sürümler</a></li>
+          <li><a href="https://github.com/bmericc/domainhunter/blob/master/LICENSE" target="_blank" rel="noopener">GPL-3.0</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="fc2_h">Sayfalar</h4>
+        <ul>
+          <li><a href="#whats-new" data-i18n="nav_new">Yenilikler</a></li>
+          <li><a href="#features" data-i18n="nav_feat">Özellikler</a></li>
+          <li><a href="#cli">CLI</a></li>
+          <li><a href="#install" data-i18n="nav_install">Kurulum</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2006–2026 <strong>Bahri Meriç CANLI</strong></p>
+      <span class="gpl">🔓 GNU GPL v3.0</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── i18n ── */
+const T = {
+  tr: {
+    nav_new:"Yenilikler", nav_feat:"Özellikler", nav_cli:"CLI",
+    nav_install:"Kurulum", nav_about:"Hakkında",
+    hero_badge:"v2.0.0 · Tamamen Yeniden Yazıldı · GPL-3.0",
+    hero_h1a:"Domainlerinizi", hero_h1b:"Akıllıca İzleyin.", hero_h1c:"Kaçırmayın.",
+    hero_desc:"Web arayüzü ve güçlü CLI ile 80'den fazla TLD'yi izleyin, WHOIS değişikliklerini anlık takip edin, e-posta bildirimleri alın. PHP 8.1+ ile sıfırdan yeniden yazıldı.",
+    hero_btn1:"İndir / Klonla", hero_btn2:"Özellikleri Gör",
+    stat1:"Sürüm", stat2:"TLD Desteği", stat3:"Minimum", stat4:"Lisans",
+    new_tag:"v2.0.0 Yenilikleri", new_h2:"Sıfırdan Yeniden Yazıldı",
+    new_sub:"2011'deki orijinal koddan geriye yalnızca fikir kaldı. Her şey modern PHP mimarisiyle yeniden inşa edildi.",
+    n1_h:"Slim 4 Web Arayüzü", n1_p:"PSR-7/PSR-15 uyumlu Slim 4 micro-framework ve Twig 3 şablonlama motoru. Temiz, hızlı ve genişletilebilir web paneli.",
+    n2_h:"Symfony Console CLI", n2_p:"<code>dh</code> veya <code>domainhunter</code> komutuyla tam CLI desteği. Domain ekleme, listeleme, WHOIS yenileme, silme ve CSV dışa aktarım.",
+    n3_h:"SQLite & MySQL Desteği", n3_p:"SQLite ile sıfır konfigürasyonlu başlangıç. Üretim ortamları için MySQL desteği. PDO prepared statement güvenliği.",
+    n4_h:"PHAR Tek Dosya Dağıtımı", n4_p:"Tek satır curl komutuyla PHAR arşivi indirin ve CLI'yi anında kullanmaya başlayın. Composer gerektirmez.",
+    n5_h:"80+ TLD & IDN Desteği", n5_p:"Tüm .tr uzantıları dahil 80'den fazla TLD. Punycode/IDN ile ASCII olmayan uluslararası domain desteği.",
+    n6_h:"Symfony Mailer 7 – SMTP Desteği", n6_p:"PHP native <code>mail()</code> yerine Symfony Mailer 7 ile SMTP, Gmail ve TLS desteği. <code>MAILER_DSN</code> ayarıyla yapılandırın; SMTP tanımlı değilse otomatik olarak <code>mail()</code>'e düşer.",
+    n7_h:"PHP 8.1+ Modern Mimari", n7_p:"Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv konfigürasyonu. Deprecated mysql_* fonksiyonları tamamen kaldırıldı.",
+    feat_tag:"Özellikler", feat_h2:"Her İhtiyacınız Karşılandı",
+    feat_sub:"Domain Hunter v2.0.0, alan adı yönetimini basit ve güçlü hale getiren kapsamlı özellikler sunar.",
+    f1_h:"Otomatik Domain İzleme", f1_p:"Cron uyumlu otomasyon ile domainleriniz periyodik olarak kontrol edilir. Kayıt, son kullanma ve güncelleme tarihleri takip edilir.",
+    f2_h:"SMTP E-posta Bildirimleri", f2_p:"Symfony Mailer 7 ile SMTP, Gmail veya TLS üzerinden e-posta bildirimleri. <code>MAILER_DSN</code> ile tek satırda yapılandırın; fallback olarak PHP <code>mail()</code> de desteklenir.",
+    f3_h:"Web Paneli", f3_p:"Slim 4 + Twig 3 tabanlı modern web arayüzü. Domainleri listeleyin, sıralayın, WHOIS bilgilerine anında erişin.",
+    f4_h:"Güçlü CLI", f4_p:"Symfony Console 7 tabanlı komut satırı arayüzü. Script ve cron entegrasyonu için mükemmel.",
+    f5_h:"80+ TLD Desteği", f5_p:".com .net .tr .com.tr .net.tr .de .uk .fr ve daha fazlası. Türkiye dahil dünya genelindeki tüm yaygın uzantılar.",
+    f6_h:"IDN / Punycode", f6_p:"Uluslararası domain adları (IDN) için Punycode desteği. Türkçe ve diğer dillerdeki özel karakterli domainler sorunsuz çalışır.",
+    f7_h:"SQLite & MySQL", f7_p:"Geliştirme için SQLite (sıfır kurulum), üretim için MySQL. PDO prepared statement ile güvenli veritabanı erişimi.",
+    f8_h:"PHAR Dağıtımı", f8_p:"Tek bir PHAR dosyasıyla CLI'yi anında kullanın. Composer kurulumu gerektirmez; hızlı başlangıç için idealdir.",
+    f9_h:"CSV Dışa Aktarım", f9_p:"Tüm domain listenizi CSV formatında dışa aktarın. Spreadsheet ve diğer araçlarla kolay entegrasyon sağlayın.",
+    cli_h2:"Komut Satırından Tam Kontrol",
+    cli_sub:"Symfony Console 7 tabanlı CLI ile tüm işlemleri terminalden yönetin. Cron entegrasyonu ile otomasyona hazır.",
+    cmd1:"Yeni bir domain ekler ve WHOIS bilgisini kaydeder.",
+    cmd2:"Tüm domainleri listeler. <code>--sort=expiry</code> ile son kullanma tarihine göre sırala.",
+    cmd3:"Belirtilen domain için WHOIS sorgusunu yeniler ve değişiklikleri kaydeder.",
+    cmd4:"Bir veya birden fazla domaini izleme listesinden siler.",
+    cmd5:"Tüm domain listesini CSV formatında dışa aktarır.",
+    cmd6:"Otomatik WHOIS izleme için cron job betiği. Değişikliklerde e-posta gönderir.",
+    tld_tag:"TLD Desteği", tld_h2:"80+ Alan Adı Uzantısı",
+    tld_sub:"Türkiye'nin tüm .tr uzantıları dahil dünya genelindeki yaygın TLD'ler desteklenir.",
+    tech_tag:"Teknoloji", tech_h2:"Modern Mimari",
+    tech_sub:"PHP ekosisteminin en güncel ve güvenilir bileşenleri kullanılarak tamamen yeniden inşa edildi.",
+    ins_tag:"Kurulum", ins_h2:"Dakikalar İçinde Başlayın",
+    ins_sub:"İki farklı kurulum yöntemi: tam web+CLI kurulumu veya hızlı PHAR ile yalnızca CLI.",
+    tab1:"Composer (Tam Kurulum)", tab2:"PHAR (Hızlı CLI)",
+    req_h:"Gereksinimler:", req_p:"PHP 8.1+, ext-intl (IDN/Punycode), ext-pdo, ext-sqlite3 veya MySQL, Composer (tam kurulum için)",
+    ab_tag:"Hakkında", ab_h2:"Proje Hakkında",
+    ab_p1:"Domain Hunter, 2006 yılında Türkiye'den yazılım geliştirici <strong style='color:#fff'>Bahri Meriç CANLI</strong> tarafından başlatılmış açık kaynaklı bir projedir. 2026'da v2.0.0 ile sıfırdan yeniden yazıldı.",
+    ab_p2:"v2.0.0, 2011'deki orijinal PHP 4/5 kodunun tamamen yerini alan modern bir yeniden yazımdır. Slim 4, Twig 3, Symfony Console ve PHP 8.1+ özellikleriyle inşa edilmiştir.",
+    ab_p3:"Proje; SourceForge ve GitHub üzerinden dağıtılmakta olup GNU GPL v3.0 lisansıyla tamamen özgür yazılım olarak sunulmaktadır.",
+    lang_tag:"Bu Sitenin Dilleri",
+    p_role:"Proje Kurucusu & Geliştirici · Türkiye",
+    m1k:"Proje", m2k:"Sürüm", m3k:"İlk Sürüm", m4k:"Lisans", m5k:"Dil (Kod)", m6k:"Platform",
+    cta_tag:"İndir & Kullan", cta_h2:"Domain Hunter v2.0.0'ı Deneyin",
+    cta_p:"Açık kaynak, özgür ve ücretsiz. Composer veya tek PHAR dosyasıyla dakikalar içinde başlayın.",
+    cta_btn1:"GitHub'dan İndir", cta_btn2:"SourceForge",
+    footer_desc:"Alan adlarınızı izleyin, değişikliklerden anında haberdar olun. Açık kaynaklı, özgür yazılım — v2.0.0.",
+    fc1_h:"Proje", fc1_rel:"Sürümler", fc2_h:"Sayfalar",
+  },
+  en: {
+    nav_new:"What's New", nav_feat:"Features", nav_cli:"CLI",
+    nav_install:"Install", nav_about:"About",
+    hero_badge:"v2.0.0 · Complete Rewrite · GPL-3.0",
+    hero_h1a:"Monitor Your", hero_h1b:"Domains Smartly.", hero_h1c:"Never Miss One.",
+    hero_desc:"Track 80+ TLDs with a web interface and powerful CLI. Get instant notifications on WHOIS changes. Completely rewritten with PHP 8.1+.",
+    hero_btn1:"Download / Clone", hero_btn2:"See Features",
+    stat1:"Version", stat2:"TLD Support", stat3:"Minimum", stat4:"License",
+    new_tag:"v2.0.0 Changes", new_h2:"Built from Scratch",
+    new_sub:"Only the idea remains from the original 2011 code. Everything was rebuilt with modern PHP architecture.",
+    n1_h:"Slim 4 Web Interface", n1_p:"PSR-7/PSR-15 compliant Slim 4 micro-framework with Twig 3 templating. Clean, fast and extensible web panel.",
+    n2_h:"Symfony Console CLI", n2_p:"Full CLI support via <code>dh</code> or <code>domainhunter</code>. Add, list, refresh WHOIS, delete domains and export to CSV.",
+    n3_h:"SQLite & MySQL Support", n3_p:"Zero-config start with SQLite. MySQL for production environments. PDO prepared statement security.",
+    n4_h:"PHAR Single-File Distribution", n4_p:"Download the PHAR archive with a single curl command and start using the CLI instantly. No Composer needed.",
+    n5_h:"80+ TLD & IDN Support", n5_p:"Over 80 TLDs including all .tr extensions. Punycode/IDN support for non-ASCII international domains.",
+    n6_h:"Symfony Mailer 7 – SMTP Support", n6_p:"SMTP, Gmail and TLS email alerts via Symfony Mailer 7 instead of native <code>mail()</code>. Configure with a single <code>MAILER_DSN</code> line; falls back to PHP <code>mail()</code> automatically.",
+    n7_h:"PHP 8.1+ Modern Architecture", n7_p:"Readonly properties, typed properties, PHP-DI 7 dependency injection, phpdotenv config. Deprecated mysql_* functions completely removed.",
+    feat_tag:"Features", feat_h2:"Everything You Need",
+    feat_sub:"Domain Hunter v2.0.0 offers comprehensive features to make domain management simple and powerful.",
+    f1_h:"Automatic Domain Monitoring", f1_p:"Cron-compatible automation checks your domains periodically. Tracks registration, expiration and update dates.",
+    f2_h:"SMTP Email Notifications", f2_p:"Email alerts via Symfony Mailer 7 with SMTP, Gmail or TLS support. Configure with one <code>MAILER_DSN</code> line; falls back to PHP <code>mail()</code> if not set.",
+    f3_h:"Web Panel", f3_p:"Modern web interface based on Slim 4 + Twig 3. List, sort domains and access WHOIS data instantly.",
+    f4_h:"Powerful CLI", f4_p:"Symfony Console 7 based command line interface. Perfect for script and cron integration.",
+    f5_h:"80+ TLD Support", f5_p:".com .net .tr .com.tr .net.tr .de .uk .fr and more. All common extensions worldwide including Turkey.",
+    f6_h:"IDN / Punycode", f6_p:"Punycode support for International Domain Names (IDN). Special character domains work seamlessly.",
+    f7_h:"SQLite & MySQL", f7_p:"SQLite for development (zero install), MySQL for production. Secure database access with PDO prepared statements.",
+    f8_h:"PHAR Distribution", f8_p:"Use the CLI instantly with a single PHAR file. No Composer installation required; ideal for quick start.",
+    f9_h:"CSV Export", f9_p:"Export your entire domain list in CSV format. Easy integration with spreadsheets and other tools.",
+    cli_h2:"Full Control from Command Line",
+    cli_sub:"Manage everything from the terminal with Symfony Console 7 CLI. Ready for automation with cron integration.",
+    cmd1:"Adds a new domain and saves its WHOIS data.",
+    cmd2:"Lists all domains. Use <code>--sort=expiry</code> to sort by expiration date.",
+    cmd3:"Refreshes the WHOIS query for the specified domain and saves changes.",
+    cmd4:"Removes one or more domains from the monitoring list.",
+    cmd5:"Exports the entire domain list in CSV format.",
+    cmd6:"Cron job script for automated WHOIS monitoring. Sends email on changes.",
+    tld_tag:"TLD Support", tld_h2:"80+ Domain Extensions",
+    tld_sub:"Popular TLDs worldwide are supported, including all Turkish .tr extensions.",
+    tech_tag:"Technology", tech_h2:"Modern Architecture",
+    tech_sub:"Completely rebuilt using the most current and reliable components of the PHP ecosystem.",
+    ins_tag:"Installation", ins_h2:"Get Started in Minutes",
+    ins_sub:"Two installation methods: full web+CLI setup or quick PHAR for CLI only.",
+    tab1:"Composer (Full Setup)", tab2:"PHAR (Quick CLI)",
+    req_h:"Requirements:", req_p:"PHP 8.1+, ext-intl (IDN/Punycode), ext-pdo, ext-sqlite3 or MySQL, Composer (for full setup)",
+    ab_tag:"About", ab_h2:"About the Project",
+    ab_p1:"Domain Hunter is an open source project started in 2006 by software developer <strong style='color:#fff'>Bahri Meriç CANLI</strong> from Turkey. In 2026, it was completely rewritten as v2.0.0.",
+    ab_p2:"v2.0.0 is a modern complete rewrite replacing the original PHP 4/5 codebase from 2011. Built with Slim 4, Twig 3, Symfony Console and PHP 8.1+ features.",
+    ab_p3:"The project is distributed via SourceForge and GitHub under the GNU GPL v3.0 license as fully free software.",
+    lang_tag:"Site Languages",
+    p_role:"Project Founder & Developer · Turkey",
+    m1k:"Project", m2k:"Version", m3k:"First Release", m4k:"License", m5k:"Code Language", m6k:"Platform",
+    cta_tag:"Download & Use", cta_h2:"Try Domain Hunter v2.0.0",
+    cta_p:"Open source, free and no cost. Get started in minutes with Composer or a single PHAR file.",
+    cta_btn1:"Download from GitHub", cta_btn2:"SourceForge",
+    footer_desc:"Monitor your domains, get notified instantly on changes. Open source, free software — v2.0.0.",
+    fc1_h:"Project", fc1_rel:"Releases", fc2_h:"Pages",
+  },
+  de: {
+    nav_new:"Neuigkeiten", nav_feat:"Funktionen", nav_cli:"CLI",
+    nav_install:"Installation", nav_about:"Über",
+    hero_badge:"v2.0.0 · Vollständig neu geschrieben · GPL-3.0",
+    hero_h1a:"Überwachen Sie Ihre", hero_h1b:"Domains intelligent.", hero_h1c:"Verpassen Sie nichts.",
+    hero_desc:"Überwachen Sie 80+ TLDs mit Web-Oberfläche und leistungsstarker CLI. Erhalten Sie sofortige Benachrichtigungen bei WHOIS-Änderungen. Komplett mit PHP 8.1+ neu geschrieben.",
+    hero_btn1:"Herunterladen / Klonen", hero_btn2:"Funktionen ansehen",
+    stat1:"Version", stat2:"TLD-Unterstützung", stat3:"Minimum", stat4:"Lizenz",
+    new_tag:"v2.0.0 Änderungen", new_h2:"Von Grund auf neu aufgebaut",
+    new_sub:"Vom ursprünglichen Code von 2011 ist nur die Idee geblieben. Alles wurde mit moderner PHP-Architektur neu aufgebaut.",
+    n1_h:"Slim 4 Web-Oberfläche", n1_p:"PSR-7/PSR-15-konformes Slim 4 Micro-Framework mit Twig 3-Templating. Sauberes, schnelles und erweiterbares Web-Panel.",
+    n2_h:"Symfony Console CLI", n2_p:"Volle CLI-Unterstützung über <code>dh</code> oder <code>domainhunter</code>. Domains hinzufügen, auflisten, WHOIS aktualisieren, löschen und als CSV exportieren.",
+    n3_h:"SQLite & MySQL-Unterstützung", n3_p:"Null-Konfiguration-Start mit SQLite. MySQL für Produktionsumgebungen. PDO Prepared Statement Sicherheit.",
+    n4_h:"PHAR-Einzeldatei-Distribution", n4_p:"Laden Sie das PHAR-Archiv mit einem einzigen curl-Befehl herunter. Kein Composer erforderlich.",
+    n5_h:"80+ TLD & IDN-Unterstützung", n5_p:"Über 80 TLDs einschließlich aller .tr-Erweiterungen. Punycode/IDN-Unterstützung für internationale Domains.",
+    n6_h:"Symfony Mailer 7 – SMTP-Unterstützung", n6_p:"SMTP, Gmail und TLS E-Mail-Benachrichtigungen über Symfony Mailer 7. Konfigurieren mit einer <code>MAILER_DSN</code>-Zeile; fällt automatisch auf PHP <code>mail()</code> zurück.",
+    n7_h:"PHP 8.1+ Moderne Architektur", n7_p:"Readonly-Eigenschaften, typed Properties, PHP-DI 7, phpdotenv. Veraltete mysql_*-Funktionen vollständig entfernt.",
+    feat_tag:"Funktionen", feat_h2:"Alles, was Sie brauchen",
+    feat_sub:"Domain Hunter v2.0.0 bietet umfassende Funktionen für einfaches und leistungsstarkes Domain-Management.",
+    f1_h:"Automatische Domain-Überwachung", f1_p:"Cron-kompatible Automatisierung prüft Ihre Domains regelmäßig. Registrierung, Ablauf und Aktualisierungsdaten werden verfolgt.",
+    f2_h:"SMTP E-Mail-Benachrichtigungen", f2_p:"E-Mail-Benachrichtigungen über Symfony Mailer 7 mit SMTP, Gmail oder TLS. Mit einer <code>MAILER_DSN</code>-Zeile konfigurieren; fällt auf PHP <code>mail()</code> zurück.",
+    f3_h:"Web-Panel", f3_p:"Modernes Web-Interface basierend auf Slim 4 + Twig 3. Domains auflisten, sortieren und WHOIS-Daten sofort abrufen.",
+    f4_h:"Leistungsstarke CLI", f4_p:"Symfony Console 7 basierte Befehlszeilenschnittstelle. Perfekt für Script- und Cron-Integration.",
+    f5_h:"80+ TLD-Unterstützung", f5_p:".com .net .tr .de .uk .fr und mehr. Alle gängigen Erweiterungen weltweit.",
+    f6_h:"IDN / Punycode", f6_p:"Punycode-Unterstützung für internationale Domain-Namen. Domains mit Sonderzeichen funktionieren problemlos.",
+    f7_h:"SQLite & MySQL", f7_p:"SQLite für die Entwicklung, MySQL für die Produktion. Sicherer Datenbankzugriff mit PDO.",
+    f8_h:"PHAR-Distribution", f8_p:"Verwenden Sie die CLI sofort mit einer einzigen PHAR-Datei. Kein Composer erforderlich.",
+    f9_h:"CSV-Export", f9_p:"Exportieren Sie Ihre gesamte Domain-Liste im CSV-Format.",
+    cli_h2:"Volle Kontrolle über die Befehlszeile",
+    cli_sub:"Verwalten Sie alles vom Terminal aus mit Symfony Console 7 CLI.",
+    cmd1:"Fügt eine neue Domain hinzu und speichert WHOIS-Daten.",
+    cmd2:"Listet alle Domains auf. Mit <code>--sort=expiry</code> nach Ablaufdatum sortieren.",
+    cmd3:"Aktualisiert die WHOIS-Abfrage für die angegebene Domain.",
+    cmd4:"Entfernt eine oder mehrere Domains aus der Überwachungsliste.",
+    cmd5:"Exportiert die gesamte Domain-Liste im CSV-Format.",
+    cmd6:"Cron-Job-Skript für automatische WHOIS-Überwachung.",
+    tld_tag:"TLD-Unterstützung", tld_h2:"80+ Domain-Erweiterungen",
+    tld_sub:"Beliebte TLDs weltweit werden unterstützt, einschließlich aller türkischen .tr-Erweiterungen.",
+    tech_tag:"Technologie", tech_h2:"Moderne Architektur",
+    tech_sub:"Komplett mit den aktuellsten PHP-Komponenten neu aufgebaut.",
+    ins_tag:"Installation", ins_h2:"In Minuten starten",
+    ins_sub:"Zwei Installationsmethoden: Vollständiges Web+CLI-Setup oder schnelles PHAR für CLI.",
+    tab1:"Composer (Vollständig)", tab2:"PHAR (Schnell CLI)",
+    req_h:"Anforderungen:", req_p:"PHP 8.1+, ext-intl, ext-pdo, ext-sqlite3 oder MySQL, Composer (für vollständige Installation)",
+    ab_tag:"Über", ab_h2:"Über das Projekt",
+    ab_p1:"Domain Hunter ist ein Open-Source-Projekt, das 2006 von dem Softwareentwickler <strong style='color:#fff'>Bahri Meriç CANLI</strong> aus der Türkei gestartet wurde. 2026 wurde es als v2.0.0 komplett neu geschrieben.",
+    ab_p2:"v2.0.0 ist ein modernes komplettes Rewrite, das die ursprüngliche PHP 4/5-Codebasis von 2011 ersetzt.",
+    ab_p3:"Das Projekt wird über SourceForge und GitHub unter der GNU GPL v3.0-Lizenz vertrieben.",
+    lang_tag:"Seitensprachen",
+    p_role:"Projektgründer & Entwickler · Türkei",
+    m1k:"Projekt", m2k:"Version", m3k:"Erste Version", m4k:"Lizenz", m5k:"Code-Sprache", m6k:"Plattform",
+    cta_tag:"Herunterladen & Verwenden", cta_h2:"Domain Hunter v2.0.0 ausprobieren",
+    cta_p:"Open Source, frei und kostenlos. In Minuten starten mit Composer oder einer einzigen PHAR-Datei.",
+    cta_btn1:"Von GitHub herunterladen", cta_btn2:"SourceForge",
+    footer_desc:"Überwachen Sie Ihre Domains, werden Sie sofort über Änderungen informiert. Open Source — v2.0.0.",
+    fc1_h:"Projekt", fc1_rel:"Versionen", fc2_h:"Seiten",
+  },
+  es: {
+    nav_new:"Novedades", nav_feat:"Características", nav_cli:"CLI",
+    nav_install:"Instalación", nav_about:"Acerca de",
+    hero_badge:"v2.0.0 · Reescrito Completamente · GPL-3.0",
+    hero_h1a:"Monitoree Sus", hero_h1b:"Dominios Inteligente.", hero_h1c:"No Se Pierda Nada.",
+    hero_desc:"Monitoree 80+ TLDs con interfaz web y potente CLI. Reciba notificaciones instantáneas sobre cambios en WHOIS. Reescrito completamente con PHP 8.1+.",
+    hero_btn1:"Descargar / Clonar", hero_btn2:"Ver Características",
+    stat1:"Versión", stat2:"Soporte TLD", stat3:"Mínimo", stat4:"Licencia",
+    new_tag:"Cambios v2.0.0", new_h2:"Construido desde Cero",
+    new_sub:"Del código original de 2011 solo queda la idea. Todo fue reconstruido con arquitectura PHP moderna.",
+    n1_h:"Interfaz Web Slim 4", n1_p:"Slim 4 micro-framework compatible con PSR-7/PSR-15 y motor de plantillas Twig 3.",
+    n2_h:"CLI Symfony Console", n2_p:"Soporte CLI completo via <code>dh</code> o <code>domainhunter</code>. Agregar, listar, actualizar WHOIS, eliminar y exportar a CSV.",
+    n3_h:"Soporte SQLite & MySQL", n3_p:"Inicio sin configuración con SQLite. MySQL para entornos de producción. Seguridad con PDO prepared statements.",
+    n4_h:"Distribución PHAR", n4_p:"Descargue el archivo PHAR con un solo comando curl y úselo de inmediato. Sin necesidad de Composer.",
+    n5_h:"80+ TLD & IDN", n5_p:"Más de 80 TLDs incluidas todas las extensiones .tr. Soporte Punycode/IDN para dominios internacionales.",
+    n6_h:"Symfony Mailer 7 – Soporte SMTP", n6_p:"Notificaciones por email con SMTP, Gmail o TLS vía Symfony Mailer 7. Configure con una línea <code>MAILER_DSN</code>; regresa automáticamente a PHP <code>mail()</code>.",
+    n7_h:"Arquitectura Moderna PHP 8.1+", n7_p:"Propiedades readonly, PHP-DI 7, phpdotenv. Las funciones mysql_* obsoletas fueron eliminadas completamente.",
+    feat_tag:"Características", feat_h2:"Todo lo que Necesitas",
+    feat_sub:"Domain Hunter v2.0.0 ofrece características completas para hacer la gestión de dominios simple y poderosa.",
+    f1_h:"Monitoreo Automático", f1_p:"Automatización compatible con cron verifica sus dominios periódicamente.",
+    f2_h:"Notificaciones SMTP por Email", f2_p:"Alertas por email con Symfony Mailer 7, SMTP, Gmail o TLS. Configure con una línea <code>MAILER_DSN</code>; usa PHP <code>mail()</code> como alternativa.",
+    f3_h:"Panel Web", f3_p:"Interfaz web moderna basada en Slim 4 + Twig 3.",
+    f4_h:"CLI Poderoso", f4_p:"Interfaz de línea de comandos basada en Symfony Console 7.",
+    f5_h:"80+ Soporte TLD", f5_p:".com .net .tr .de .uk .es y más. Todas las extensiones comunes en todo el mundo.",
+    f6_h:"IDN / Punycode", f6_p:"Soporte Punycode para nombres de dominio internacionales (IDN).",
+    f7_h:"SQLite & MySQL", f7_p:"SQLite para desarrollo, MySQL para producción. Acceso seguro con PDO.",
+    f8_h:"Distribución PHAR", f8_p:"Use la CLI al instante con un solo archivo PHAR.",
+    f9_h:"Exportación CSV", f9_p:"Exporte toda su lista de dominios en formato CSV.",
+    cli_h2:"Control Total desde la Línea de Comandos",
+    cli_sub:"Gestione todo desde el terminal con Symfony Console 7 CLI.",
+    cmd1:"Agrega un nuevo dominio y guarda su información WHOIS.",
+    cmd2:"Lista todos los dominios. Use <code>--sort=expiry</code> para ordenar por fecha de expiración.",
+    cmd3:"Actualiza la consulta WHOIS para el dominio especificado.",
+    cmd4:"Elimina uno o más dominios de la lista de monitoreo.",
+    cmd5:"Exporta toda la lista de dominios en formato CSV.",
+    cmd6:"Script cron para monitoreo automático de WHOIS.",
+    tld_tag:"Soporte TLD", tld_h2:"80+ Extensiones de Dominio",
+    tld_sub:"Se admiten TLDs populares en todo el mundo, incluidas todas las extensiones .tr turcas.",
+    tech_tag:"Tecnología", tech_h2:"Arquitectura Moderna",
+    tech_sub:"Completamente reconstruido con los componentes más actuales del ecosistema PHP.",
+    ins_tag:"Instalación", ins_h2:"Empiece en Minutos",
+    ins_sub:"Dos métodos: configuración completa web+CLI o PHAR rápido solo para CLI.",
+    tab1:"Composer (Completo)", tab2:"PHAR (CLI Rápido)",
+    req_h:"Requisitos:", req_p:"PHP 8.1+, ext-intl, ext-pdo, ext-sqlite3 o MySQL, Composer (para instalación completa)",
+    ab_tag:"Acerca de", ab_h2:"Sobre el Proyecto",
+    ab_p1:"Domain Hunter es un proyecto de código abierto iniciado en 2006 por el desarrollador de software <strong style='color:#fff'>Bahri Meriç CANLI</strong> de Turquía. En 2026, fue completamente reescrito como v2.0.0.",
+    ab_p2:"v2.0.0 es una reescritura moderna completa que reemplaza el código PHP 4/5 original de 2011.",
+    ab_p3:"El proyecto se distribuye a través de SourceForge y GitHub bajo la licencia GNU GPL v3.0.",
+    lang_tag:"Idiomas del Sitio",
+    p_role:"Fundador del Proyecto & Desarrollador · Turquía",
+    m1k:"Proyecto", m2k:"Versión", m3k:"Primera Versión", m4k:"Licencia", m5k:"Idioma Código", m6k:"Plataforma",
+    cta_tag:"Descargar & Usar", cta_h2:"Pruebe Domain Hunter v2.0.0",
+    cta_p:"Código abierto, libre y gratuito. Empiece en minutos con Composer o un solo archivo PHAR.",
+    cta_btn1:"Descargar de GitHub", cta_btn2:"SourceForge",
+    footer_desc:"Monitoree sus dominios, reciba notificaciones instantáneas. Software libre y abierto — v2.0.0.",
+    fc1_h:"Proyecto", fc1_rel:"Versiones", fc2_h:"Páginas",
+  },
+  pt: {
+    nav_new:"Novidades", nav_feat:"Recursos", nav_cli:"CLI",
+    nav_install:"Instalação", nav_about:"Sobre",
+    hero_badge:"v2.0.0 · Completamente Reescrito · GPL-3.0",
+    hero_h1a:"Monitore Seus", hero_h1b:"Domínios com Inteligência.", hero_h1c:"Nunca Perca Nada.",
+    hero_desc:"Monitore 80+ TLDs com interface web e CLI poderosa. Receba notificações instantâneas sobre mudanças no WHOIS. Completamente reescrito com PHP 8.1+.",
+    hero_btn1:"Baixar / Clonar", hero_btn2:"Ver Recursos",
+    stat1:"Versão", stat2:"Suporte TLD", stat3:"Mínimo", stat4:"Licença",
+    new_tag:"Mudanças v2.0.0", new_h2:"Construído do Zero",
+    new_sub:"Do código original de 2011 só ficou a ideia. Tudo foi reconstruído com arquitetura PHP moderna.",
+    n1_h:"Interface Web Slim 4", n1_p:"Slim 4 micro-framework compatível com PSR-7/PSR-15 e motor de templates Twig 3.",
+    n2_h:"Symfony Console CLI", n2_p:"Suporte CLI completo via <code>dh</code> ou <code>domainhunter</code>. Adicionar, listar, atualizar WHOIS, deletar e exportar para CSV.",
+    n3_h:"Suporte SQLite & MySQL", n3_p:"Início sem configuração com SQLite. MySQL para ambientes de produção. Segurança com PDO prepared statements.",
+    n4_h:"Distribuição PHAR", n4_p:"Baixe o arquivo PHAR com um único comando curl e comece a usar imediatamente.",
+    n5_h:"80+ TLD & IDN", n5_p:"Mais de 80 TLDs incluindo todas as extensões .tr. Suporte Punycode/IDN.",
+    n6_h:"Symfony Mailer 7 – Suporte SMTP", n6_p:"Notificações por email com SMTP, Gmail ou TLS via Symfony Mailer 7. Configure com uma linha <code>MAILER_DSN</code>; usa PHP <code>mail()</code> como fallback.",
+    n7_h:"Arquitetura Moderna PHP 8.1+", n7_p:"Propriedades readonly, PHP-DI 7, phpdotenv. Funções mysql_* obsoletas completamente removidas.",
+    feat_tag:"Recursos", feat_h2:"Tudo que Você Precisa",
+    feat_sub:"Domain Hunter v2.0.0 oferece recursos abrangentes para tornar o gerenciamento de domínios simples e poderoso.",
+    f1_h:"Monitoramento Automático", f1_p:"Automação compatível com cron verifica seus domínios periodicamente.",
+    f2_h:"Notificações SMTP por Email", f2_p:"Alertas por email com Symfony Mailer 7, SMTP, Gmail ou TLS. Configure com uma linha <code>MAILER_DSN</code>; usa PHP <code>mail()</code> como fallback.",
+    f3_h:"Painel Web", f3_p:"Interface web moderna baseada em Slim 4 + Twig 3.",
+    f4_h:"CLI Poderosa", f4_p:"Interface de linha de comando baseada em Symfony Console 7.",
+    f5_h:"80+ Suporte TLD", f5_p:".com .net .tr .de .uk .fr e mais. Todas as extensões comuns em todo o mundo.",
+    f6_h:"IDN / Punycode", f6_p:"Suporte Punycode para nomes de domínio internacionais (IDN).",
+    f7_h:"SQLite & MySQL", f7_p:"SQLite para desenvolvimento, MySQL para produção. Acesso seguro com PDO.",
+    f8_h:"Distribuição PHAR", f8_p:"Use a CLI instantaneamente com um único arquivo PHAR.",
+    f9_h:"Exportação CSV", f9_p:"Exporte toda a sua lista de domínios em formato CSV.",
+    cli_h2:"Controle Total da Linha de Comando",
+    cli_sub:"Gerencie tudo pelo terminal com Symfony Console 7 CLI.",
+    cmd1:"Adiciona um novo domínio e salva suas informações WHOIS.",
+    cmd2:"Lista todos os domínios. Use <code>--sort=expiry</code> para ordenar por data de expiração.",
+    cmd3:"Atualiza a consulta WHOIS para o domínio especificado.",
+    cmd4:"Remove um ou mais domínios da lista de monitoramento.",
+    cmd5:"Exporta toda a lista de domínios em formato CSV.",
+    cmd6:"Script cron para monitoramento automático de WHOIS.",
+    tld_tag:"Suporte TLD", tld_h2:"80+ Extensões de Domínio",
+    tld_sub:"TLDs populares em todo o mundo são suportados, incluindo todas as extensões .tr turcas.",
+    tech_tag:"Tecnologia", tech_h2:"Arquitetura Moderna",
+    tech_sub:"Completamente reconstruído com os componentes mais atuais do ecossistema PHP.",
+    ins_tag:"Instalação", ins_h2:"Comece em Minutos",
+    ins_sub:"Dois métodos: configuração completa web+CLI ou PHAR rápido apenas para CLI.",
+    tab1:"Composer (Completo)", tab2:"PHAR (CLI Rápido)",
+    req_h:"Requisitos:", req_p:"PHP 8.1+, ext-intl, ext-pdo, ext-sqlite3 ou MySQL, Composer (para instalação completa)",
+    ab_tag:"Sobre", ab_h2:"Sobre o Projeto",
+    ab_p1:"Domain Hunter é um projeto de código aberto iniciado em 2006 pelo desenvolvedor de software <strong style='color:#fff'>Bahri Meriç CANLI</strong> da Turquia. Em 2026, foi completamente reescrito como v2.0.0.",
+    ab_p2:"v2.0.0 é uma reescrita moderna completa que substitui o código PHP 4/5 original de 2011.",
+    ab_p3:"O projeto é distribuído via SourceForge e GitHub sob a licença GNU GPL v3.0.",
+    lang_tag:"Idiomas do Site",
+    p_role:"Fundador do Projeto & Desenvolvedor · Turquia",
+    m1k:"Projeto", m2k:"Versão", m3k:"Primeira Versão", m4k:"Licença", m5k:"Linguagem Código", m6k:"Plataforma",
+    cta_tag:"Baixar & Usar", cta_h2:"Experimente Domain Hunter v2.0.0",
+    cta_p:"Código aberto, livre e gratuito. Comece em minutos com Composer ou um único arquivo PHAR.",
+    cta_btn1:"Baixar do GitHub", cta_btn2:"SourceForge",
+    footer_desc:"Monitore seus domínios, seja notificado instantaneamente sobre mudanças. Software livre — v2.0.0.",
+    fc1_h:"Projeto", fc1_rel:"Versões", fc2_h:"Páginas",
+  },
+  ru: {
+    nav_new:"Новое", nav_feat:"Функции", nav_cli:"CLI",
+    nav_install:"Установка", nav_about:"О проекте",
+    hero_badge:"v2.0.0 · Полностью переписан · GPL-3.0",
+    hero_h1a:"Умный мониторинг", hero_h1b:"ваших доменов.", hero_h1c:"Не пропустите ничего.",
+    hero_desc:"Отслеживайте 80+ TLD через веб-интерфейс и мощный CLI. Получайте мгновенные уведомления об изменениях WHOIS. Полностью переписан на PHP 8.1+.",
+    hero_btn1:"Скачать / Клонировать", hero_btn2:"Посмотреть функции",
+    stat1:"Версия", stat2:"Поддержка TLD", stat3:"Минимум", stat4:"Лицензия",
+    new_tag:"Изменения v2.0.0", new_h2:"Построен с нуля",
+    new_sub:"От оригинального кода 2011 года осталась только идея. Всё переписано с современной архитектурой PHP.",
+    n1_h:"Веб-интерфейс Slim 4", n1_p:"Slim 4 micro-framework совместимый с PSR-7/PSR-15 и шаблонизатор Twig 3.",
+    n2_h:"Symfony Console CLI", n2_p:"Полная поддержка CLI через <code>dh</code> или <code>domainhunter</code>. Добавление, список, обновление WHOIS, удаление и экспорт в CSV.",
+    n3_h:"Поддержка SQLite & MySQL", n3_p:"Запуск без настройки с SQLite. MySQL для производственных сред. Безопасность PDO prepared statements.",
+    n4_h:"Дистрибутив PHAR", n4_p:"Скачайте PHAR-архив одной командой curl и сразу используйте CLI. Composer не нужен.",
+    n5_h:"80+ TLD & IDN", n5_p:"Более 80 TLD включая все расширения .tr. Поддержка Punycode/IDN для международных доменов.",
+    n6_h:"Symfony Mailer 7 – Поддержка SMTP", n6_p:"Email-уведомления через Symfony Mailer 7 с SMTP, Gmail или TLS. Настройка одной строкой <code>MAILER_DSN</code>; автоматически переключается на PHP <code>mail()</code>.",
+    n7_h:"Современная архитектура PHP 8.1+", n7_p:"Readonly свойства, PHP-DI 7, phpdotenv. Устаревшие функции mysql_* полностью удалены.",
+    feat_tag:"Функции", feat_h2:"Всё что вам нужно",
+    feat_sub:"Domain Hunter v2.0.0 предлагает комплексные функции для простого и мощного управления доменами.",
+    f1_h:"Автоматический мониторинг", f1_p:"Совместимая с cron автоматизация периодически проверяет ваши домены.",
+    f2_h:"SMTP Email-уведомления", f2_p:"Email-уведомления через Symfony Mailer 7 с SMTP, Gmail или TLS. Настройка одной строкой <code>MAILER_DSN</code>; переключается на PHP <code>mail()</code> как запасной вариант.",
+    f3_h:"Веб-панель", f3_p:"Современный веб-интерфейс на основе Slim 4 + Twig 3.",
+    f4_h:"Мощный CLI", f4_p:"Интерфейс командной строки на основе Symfony Console 7.",
+    f5_h:"80+ поддержка TLD", f5_p:".com .net .tr .de .uk .ru и многое другое.",
+    f6_h:"IDN / Punycode", f6_p:"Поддержка Punycode для международных доменных имён (IDN).",
+    f7_h:"SQLite & MySQL", f7_p:"SQLite для разработки, MySQL для продакшена. Безопасный доступ с PDO.",
+    f8_h:"Дистрибутив PHAR", f8_p:"Используйте CLI мгновенно с одним файлом PHAR.",
+    f9_h:"Экспорт CSV", f9_p:"Экспортируйте весь список доменов в формате CSV.",
+    cli_h2:"Полный контроль из командной строки",
+    cli_sub:"Управляйте всем из терминала с Symfony Console 7 CLI.",
+    cmd1:"Добавляет новый домен и сохраняет данные WHOIS.",
+    cmd2:"Выводит список всех доменов. <code>--sort=expiry</code> для сортировки по дате истечения.",
+    cmd3:"Обновляет WHOIS-запрос для указанного домена.",
+    cmd4:"Удаляет один или несколько доменов из списка мониторинга.",
+    cmd5:"Экспортирует весь список доменов в формате CSV.",
+    cmd6:"Cron-скрипт для автоматического мониторинга WHOIS.",
+    tld_tag:"Поддержка TLD", tld_h2:"80+ расширений доменов",
+    tld_sub:"Поддерживаются популярные TLD по всему миру, включая все турецкие расширения .tr.",
+    tech_tag:"Технологии", tech_h2:"Современная архитектура",
+    tech_sub:"Полностью пересобран с использованием новейших компонентов экосистемы PHP.",
+    ins_tag:"Установка", ins_h2:"Начните за минуты",
+    ins_sub:"Два метода установки: полная web+CLI или быстрый PHAR только для CLI.",
+    tab1:"Composer (Полная)", tab2:"PHAR (Быстрый CLI)",
+    req_h:"Требования:", req_p:"PHP 8.1+, ext-intl, ext-pdo, ext-sqlite3 или MySQL, Composer (для полной установки)",
+    ab_tag:"О проекте", ab_h2:"О проекте",
+    ab_p1:"Domain Hunter — проект с открытым исходным кодом, запущенный в 2006 году разработчиком ПО <strong style='color:#fff'>Bahri Meriç CANLI</strong> из Турции. В 2026 году полностью переписан как v2.0.0.",
+    ab_p2:"v2.0.0 — современная полная переработка, заменяющая оригинальный код PHP 4/5 2011 года.",
+    ab_p3:"Проект распространяется через SourceForge и GitHub под лицензией GNU GPL v3.0.",
+    lang_tag:"Языки сайта",
+    p_role:"Основатель проекта & Разработчик · Турция",
+    m1k:"Проект", m2k:"Версия", m3k:"Первая версия", m4k:"Лицензия", m5k:"Язык кода", m6k:"Платформа",
+    cta_tag:"Скачать & Использовать", cta_h2:"Попробуйте Domain Hunter v2.0.0",
+    cta_p:"Открытый исходный код, свободный и бесплатный. Начните за минуты с Composer или одним файлом PHAR.",
+    cta_btn1:"Скачать с GitHub", cta_btn2:"SourceForge",
+    footer_desc:"Мониторинг доменов, мгновенные уведомления об изменениях. Свободное ПО — v2.0.0.",
+    fc1_h:"Проект", fc1_rel:"Релизы", fc2_h:"Страницы",
+  },
+  zh: {
+    nav_new:"新功能", nav_feat:"功能特性", nav_cli:"CLI",
+    nav_install:"安装", nav_about:"关于",
+    hero_badge:"v2.0.0 · 完全重写 · GPL-3.0",
+    hero_h1a:"智能监控", hero_h1b:"您的域名。", hero_h1c:"不再错过。",
+    hero_desc:"通过Web界面和强大的CLI监控80+个顶级域名。即时获取WHOIS变更通知。基于PHP 8.1+完全重写。",
+    hero_btn1:"下载 / 克隆", hero_btn2:"查看功能",
+    stat1:"版本", stat2:"TLD支持", stat3:"最低要求", stat4:"许可证",
+    new_tag:"v2.0.0 更新", new_h2:"从零开始构建",
+    new_sub:"2011年原始代码中只保留了理念。一切都用现代PHP架构重新构建。",
+    n1_h:"Slim 4 Web界面", n1_p:"符合PSR-7/PSR-15的Slim 4微框架和Twig 3模板引擎。干净、快速、可扩展的Web面板。",
+    n2_h:"Symfony Console CLI", n2_p:"通过<code>dh</code>或<code>domainhunter</code>命令的完整CLI支持。添加、列出、刷新WHOIS、删除域名和CSV导出。",
+    n3_h:"SQLite & MySQL支持", n3_p:"SQLite零配置启动，MySQL用于生产环境。PDO预处理语句安全保障。",
+    n4_h:"PHAR单文件分发", n4_p:"通过一个curl命令下载PHAR存档，立即开始使用CLI。无需Composer。",
+    n5_h:"80+ TLD & IDN支持", n5_p:"支持80多个TLD，包括所有.tr扩展。通过Punycode/IDN支持非ASCII国际域名。",
+    n6_h:"Symfony Mailer 7 – SMTP支持", n6_p:"通过Symfony Mailer 7实现SMTP、Gmail和TLS邮件提醒。使用<code>MAILER_DSN</code>一行配置；无SMTP时自动回退到PHP <code>mail()</code>。",
+    n7_h:"PHP 8.1+ 现代架构", n7_p:"只读属性、类型属性、PHP-DI 7依赖注入、phpdotenv配置。已完全删除废弃的mysql_*函数。",
+    feat_tag:"功能特性", feat_h2:"一切尽在掌握",
+    feat_sub:"Domain Hunter v2.0.0提供全面的功能，让域名管理变得简单而强大。",
+    f1_h:"自动域名监控", f1_p:"与Cron兼容的自动化定期检查您的域名。跟踪注册、到期和更新日期。",
+    f2_h:"SMTP邮件通知", f2_p:"通过Symfony Mailer 7实现SMTP、Gmail或TLS邮件提醒。一行<code>MAILER_DSN</code>配置；回退到PHP <code>mail()</code>。",
+    f3_h:"Web管理面板", f3_p:"基于Slim 4 + Twig 3的现代Web界面。列出、排序域名并即时访问WHOIS数据。",
+    f4_h:"强大的CLI", f4_p:"基于Symfony Console 7的命令行界面。完美用于脚本和Cron集成。",
+    f5_h:"80+ TLD支持", f5_p:".com .net .tr .de .uk .fr等。全球所有常见扩展。",
+    f6_h:"IDN / Punycode", f6_p:"支持国际域名(IDN)的Punycode。带特殊字符的域名无缝运行。",
+    f7_h:"SQLite & MySQL", f7_p:"开发用SQLite（零安装），生产用MySQL。PDO安全数据库访问。",
+    f8_h:"PHAR分发", f8_p:"使用单个PHAR文件即时使用CLI。无需安装Composer；适合快速启动。",
+    f9_h:"CSV导出", f9_p:"以CSV格式导出整个域名列表。轻松与电子表格和其他工具集成。",
+    cli_h2:"从命令行完全控制",
+    cli_sub:"使用Symfony Console 7 CLI从终端管理一切。支持Cron集成，实现自动化。",
+    cmd1:"添加新域名并保存其WHOIS信息。",
+    cmd2:"列出所有域名。使用<code>--sort=expiry</code>按到期日期排序。",
+    cmd3:"刷新指定域名的WHOIS查询并保存更改。",
+    cmd4:"从监控列表中删除一个或多个域名。",
+    cmd5:"以CSV格式导出整个域名列表。",
+    cmd6:"用于自动WHOIS监控的Cron脚本。变更时发送邮件。",
+    tld_tag:"TLD支持", tld_h2:"80+域名扩展",
+    tld_sub:"支持全球流行TLD，包括所有土耳其.tr扩展。",
+    tech_tag:"技术栈", tech_h2:"现代架构",
+    tech_sub:"使用PHP生态系统最新、最可靠的组件完全重建。",
+    ins_tag:"安装", ins_h2:"几分钟内开始",
+    ins_sub:"两种安装方式：完整的Web+CLI安装或快速PHAR仅CLI。",
+    tab1:"Composer（完整安装）", tab2:"PHAR（快速CLI）",
+    req_h:"系统要求：", req_p:"PHP 8.1+、ext-intl（IDN/Punycode）、ext-pdo、ext-sqlite3或MySQL、Composer（完整安装需要）",
+    ab_tag:"关于", ab_h2:"关于项目",
+    ab_p1:"Domain Hunter是一个开源项目，2006年由来自土耳其的软件开发者<strong style='color:#fff'>Bahri Meriç CANLI</strong>创建。2026年，以v2.0.0完全重写。",
+    ab_p2:"v2.0.0是完全替代2011年原始PHP 4/5代码库的现代重写版本。基于Slim 4、Twig 3、Symfony Console和PHP 8.1+特性构建。",
+    ab_p3:"项目通过SourceForge和GitHub以GNU GPL v3.0许可证作为完全自由软件发布。",
+    lang_tag:"网站语言",
+    p_role:"项目创始人 & 开发者 · 土耳其",
+    m1k:"项目", m2k:"版本", m3k:"首发版本", m4k:"许可证", m5k:"代码语言", m6k:"平台",
+    cta_tag:"下载 & 使用", cta_h2:"立即体验 Domain Hunter v2.0.0",
+    cta_p:"开源、自由、免费。通过Composer或单个PHAR文件几分钟内开始。",
+    cta_btn1:"从GitHub下载", cta_btn2:"SourceForge",
+    footer_desc:"监控您的域名，及时获取变更通知。开源自由软件 — v2.0.0。",
+    fc1_h:"项目", fc1_rel:"版本", fc2_h:"页面",
+  },
+  ja: {
+    nav_new:"新機能", nav_feat:"機能", nav_cli:"CLI",
+    nav_install:"インストール", nav_about:"について",
+    hero_badge:"v2.0.0 · 完全書き直し · GPL-3.0",
+    hero_h1a:"ドメインを", hero_h1b:"スマートに監視。", hero_h1c:"見逃しなし。",
+    hero_desc:"Webインターフェースと強力なCLIで80以上のTLDを監視。WHOIS変更を即座に通知。PHP 8.1+で完全に書き直されました。",
+    hero_btn1:"ダウンロード / クローン", hero_btn2:"機能を見る",
+    stat1:"バージョン", stat2:"TLDサポート", stat3:"最小要件", stat4:"ライセンス",
+    new_tag:"v2.0.0 変更点", new_h2:"ゼロから構築",
+    new_sub:"2011年のオリジナルコードからはアイデアだけが残りました。すべてがモダンなPHPアーキテクチャで再構築されました。",
+    n1_h:"Slim 4 Webインターフェース", n1_p:"PSR-7/PSR-15準拠のSlim 4マイクロフレームワークとTwig 3テンプレートエンジン。クリーンで高速、拡張可能なWebパネル。",
+    n2_h:"Symfony Console CLI", n2_p:"<code>dh</code>または<code>domainhunter</code>コマンドで完全なCLIサポート。ドメインの追加、一覧表示、WHOIS更新、削除、CSV出力。",
+    n3_h:"SQLite & MySQLサポート", n3_p:"SQLiteでゼロ設定スタート。本番環境用MySQL。PDOプリペアドステートメントのセキュリティ。",
+    n4_h:"PHAR単一ファイル配布", n4_p:"1つのcurlコマンドでPHARアーカイブをダウンロードしてすぐに使用開始。Composerは不要。",
+    n5_h:"80以上のTLD & IDNサポート", n5_p:"全.tr拡張子を含む80以上のTLD。Punycode/IDNによる非ASCII国際ドメインのサポート。",
+    n6_h:"Symfony Mailer 7 – SMTPサポート", n6_p:"Symfony Mailer 7によるSMTP、Gmail、TLSメール通知。<code>MAILER_DSN</code>1行で設定；SMTP未設定時はPHP <code>mail()</code>に自動フォールバック。",
+    n7_h:"PHP 8.1+ モダンアーキテクチャ", n7_p:"readonlyプロパティ、型付きプロパティ、PHP-DI 7依存性注入、phpdotenv設定。廃止されたmysql_*関数は完全に削除。",
+    feat_tag:"機能", feat_h2:"必要なすべてが揃っています",
+    feat_sub:"Domain Hunter v2.0.0は、ドメイン管理をシンプルかつ強力にする包括的な機能を提供します。",
+    f1_h:"自動ドメイン監視", f1_p:"Cron対応の自動化でドメインを定期的にチェック。登録、有効期限、更新日を追跡します。",
+    f2_h:"SMTPメール通知", f2_p:"Symfony Mailer 7によるSMTP、Gmail、TLSメール通知。<code>MAILER_DSN</code>1行で設定；PHP <code>mail()</code>へのフォールバックもサポート。",
+    f3_h:"Webパネル", f3_p:"Slim 4 + Twig 3ベースのモダンWebインターフェース。ドメインの一覧表示、ソート、WHOIS情報への即座のアクセス。",
+    f4_h:"強力なCLI", f4_p:"Symfony Console 7ベースのコマンドラインインターフェース。スクリプトやCron連携に最適。",
+    f5_h:"80以上のTLDサポート", f5_p:".com .net .tr .de .uk .frなど。世界中のすべての一般的な拡張子。",
+    f6_h:"IDN / Punycode", f6_p:"国際ドメイン名(IDN)のPunycodeサポート。特殊文字ドメインもシームレスに動作。",
+    f7_h:"SQLite & MySQL", f7_p:"開発用SQLite（ゼロインストール）、本番用MySQL。PDOによる安全なデータベースアクセス。",
+    f8_h:"PHAR配布", f8_p:"単一PHARファイルでCLIをすぐに使用。Composerインストール不要。",
+    f9_h:"CSVエクスポート", f9_p:"ドメインリスト全体をCSV形式でエクスポート。スプレッドシートなどとの連携が簡単。",
+    cli_h2:"コマンドラインから完全制御",
+    cli_sub:"Symfony Console 7 CLIでターミナルからすべてを管理。Cron連携で自動化に対応。",
+    cmd1:"新しいドメインを追加してWHOIS情報を保存します。",
+    cmd2:"すべてのドメインを一覧表示。<code>--sort=expiry</code>で有効期限順にソート。",
+    cmd3:"指定したドメインのWHOISクエリを更新し変更を保存します。",
+    cmd4:"監視リストから1つ以上のドメインを削除します。",
+    cmd5:"ドメインリスト全体をCSV形式でエクスポートします。",
+    cmd6:"自動WHOIS監視のためのCronスクリプト。変更時にメール送信。",
+    tld_tag:"TLDサポート", tld_h2:"80以上のドメイン拡張子",
+    tld_sub:"トルコの全.tr拡張子を含む世界中の一般的なTLDをサポート。",
+    tech_tag:"技術", tech_h2:"モダンアーキテクチャ",
+    tech_sub:"PHPエコシステムの最新かつ信頼性の高いコンポーネントで完全に再構築。",
+    ins_tag:"インストール", ins_h2:"数分で開始",
+    ins_sub:"2つのインストール方法：完全なWeb+CLIセットアップまたはPHARによるCLIのみの高速セットアップ。",
+    tab1:"Composer（フルセットアップ）", tab2:"PHAR（高速CLI）",
+    req_h:"動作要件：", req_p:"PHP 8.1+、ext-intl（IDN/Punycode）、ext-pdo、ext-sqlite3またはMySQL、Composer（フルセットアップ用）",
+    ab_tag:"について", ab_h2:"プロジェクトについて",
+    ab_p1:"Domain Hunterは、2006年にトルコのソフトウェア開発者<strong style='color:#fff'>Bahri Meriç CANLI</strong>によって開始されたオープンソースプロジェクトです。2026年にv2.0.0として完全に書き直されました。",
+    ab_p2:"v2.0.0は2011年のPHP 4/5オリジナルコードを完全に置き換えるモダンな書き直しです。Slim 4、Twig 3、Symfony ConsoleとPHP 8.1+機能で構築。",
+    ab_p3:"このプロジェクトはSourceForgeとGitHubを通じてGNU GPL v3.0ライセンスで自由ソフトウェアとして配布されています。",
+    lang_tag:"サイト言語",
+    p_role:"プロジェクト創設者 & 開発者 · トルコ",
+    m1k:"プロジェクト", m2k:"バージョン", m3k:"初回リリース", m4k:"ライセンス", m5k:"コード言語", m6k:"プラットフォーム",
+    cta_tag:"ダウンロード & 使用", cta_h2:"Domain Hunter v2.0.0を試してみましょう",
+    cta_p:"オープンソース、自由、無料。ComposerまたはPHARファイル1つで数分以内に開始。",
+    cta_btn1:"GitHubからダウンロード", cta_btn2:"SourceForge",
+    footer_desc:"ドメインを監視し、変更を即座に通知。オープンソース自由ソフトウェア — v2.0.0。",
+    fc1_h:"プロジェクト", fc1_rel:"リリース", fc2_h:"ページ",
+  }
+};
+
+let currentLang = 'ru';
+
+function applyLang(lang) {
+  if (!T[lang]) return;
+  currentLang = lang;
+  localStorage.setItem('dh_lang', lang);
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (T[lang][k] !== undefined) el.innerHTML = T[lang][k];
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+});
+
+applyLang(currentLang);
+
+/* ── Install Tabs ── */
+document.querySelectorAll('.itab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.itab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.iblock').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ── Scroll Reveal ── */
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
+}, { threshold: 0.1 });
+reveals.forEach(el => io.observe(el));
+
+document.querySelectorAll('.feat-card').forEach((c, i) => { c.style.transitionDelay = (i * 0.06) + 's'; });
+document.querySelectorAll('.new-card').forEach((c, i) => { c.style.transitionDelay = (i * 0.08) + 's'; });
+</script>
+</body>
+</html>

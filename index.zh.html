@@ -1580,7 +1580,10 @@ function applyLang(lang) {
 }
 
 document.querySelectorAll('.lang-btn').forEach(btn => {
-  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  btn.addEventListener('click', () => {
+    var map={tr:'index.tr.html',en:'index.en.html',de:'index.de.html',es:'index.es.html',pt:'index.pt.html',ru:'index.ru.html',zh:'index.zh.html',ja:'index.ja.html'};
+    location.href = map[btn.dataset.lang] || 'index.tr.html';
+  });
 });
 
 applyLang(currentLang);

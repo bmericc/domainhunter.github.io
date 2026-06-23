@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function(){
+      var map={'tr':'index.tr.html','en':'index.en.html','de':'index.de.html','es':'index.es.html','pt':'index.pt.html','ru':'index.ru.html','zh':'index.zh.html','ja':'index.ja.html'};
+      var lang=(navigator.language||navigator.userLanguage||'tr').slice(0,2).toLowerCase();
+      location.replace(map[lang]||'index.tr.html');
+    })();
+  </script>
   <meta name="description" content="Domain Hunter v2.0.0 – Açık kaynaklı alan adı izleme uygulaması. Web arayüzü, CLI, 80+ TLD, SQLite/MySQL, PHP 8.1+" />
   <meta name="author" content="Bahri Meriç CANLI" />
   <title>Domain Hunter v2.0.0</title>

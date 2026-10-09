@@ -216,6 +216,10 @@
     .hero-desc { font-size: 1.1rem; color: var(--muted); margin-bottom: 36px; max-width: 480px; }
 
     .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-note { margin-top: 14px; font-size: 0.86rem; color: var(--muted); }
+    .hero-note a { color: var(--accent); font-weight: 600; }
+    .hero-note a:hover { text-decoration: underline; }
+    .nav-cloud { white-space: nowrap; }
 
     .hero-stats {
       display: flex; gap: 28px; flex-wrap: wrap;
@@ -527,6 +531,7 @@
     }
     @media(max-width:640px){
       .nav-links{ display:none; }
+      .nav-gh{ display:none; }
       .footer-grid{ grid-template-columns:1fr; }
       .hero-stats{ gap:18px; }
     }
@@ -549,16 +554,19 @@
     </ul>
     <div class="nav-right">
       <div class="lang-switcher">
-        <a class="lang-btn active" href="index.tr.html">TR</a>
-        <a class="lang-btn" href="index.en.html">EN</a>
-        <a class="lang-btn" href="index.de.html">DE</a>
-        <a class="lang-btn" href="index.es.html">ES</a>
-        <a class="lang-btn" href="index.pt.html">PT</a>
-        <a class="lang-btn" href="index.ru.html">RU</a>
-        <a class="lang-btn" href="index.zh.html">ZH</a>
-        <a class="lang-btn" href="index.ja.html">JA</a>
+        <a class="lang-btn active" href="index.tr.html" hreflang="tr" data-lang="tr">TR</a>
+        <a class="lang-btn" href="index.en.html" hreflang="en" data-lang="en">EN</a>
+        <a class="lang-btn" href="index.de.html" hreflang="de" data-lang="de">DE</a>
+        <a class="lang-btn" href="index.es.html" hreflang="es" data-lang="es">ES</a>
+        <a class="lang-btn" href="index.pt.html" hreflang="pt" data-lang="pt">PT</a>
+        <a class="lang-btn" href="index.ru.html" hreflang="ru" data-lang="ru">RU</a>
+        <a class="lang-btn" href="index.zh.html" hreflang="zh" data-lang="zh">ZH</a>
+        <a class="lang-btn" href="index.ja.html" hreflang="ja" data-lang="ja">JA</a>
       </div>
-      <a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener" class="btn btn-o" style="padding:8px 16px;font-size:0.83rem;">
+      <a href="https://app.domainhunter.tr" target="_blank" rel="noopener" class="btn btn-p nav-cloud" style="padding:8px 16px;font-size:0.83rem;">
+        <span data-i18n="nav_cloud">Bulut Sürüm</span>
+      </a>
+      <a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener" class="btn btn-o nav-gh" style="padding:8px 16px;font-size:0.83rem;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
         GitHub
       </a>
@@ -586,7 +594,11 @@
           PHP 8.2+ ile sıfırdan yeniden yazıldı.
         </p>
         <div class="hero-cta">
-          <a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener" class="btn btn-p">
+          <a href="https://app.domainhunter.tr" target="_blank" rel="noopener" class="btn btn-p">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+            <span data-i18n="hero_cloud">Kurulumsuz Kullan</span> &rarr;
+          </a>
+          <a href="https://github.com/bmericc/domainhunter" target="_blank" rel="noopener" class="btn btn-o">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             <span data-i18n="hero_btn1">İndir / Klonla</span>
           </a>
@@ -594,6 +606,10 @@
             <span data-i18n="hero_btn2">Özellikleri Gör</span>
           </a>
         </div>
+        <p class="hero-note">
+          <span data-i18n="hero_cloud_note">Kurulum gerekmez — bulut sürüm hazır:</span>
+          <a href="https://app.domainhunter.tr" target="_blank" rel="noopener">app.domainhunter.tr</a>
+        </p>
         <div class="hero-stats">
           <div>
             <div class="stat-num">2.0.5</div>
@@ -874,7 +890,7 @@
     <div class="tech-grid">
       <div class="tech-card reveal">
         <span class="t-icon">🐘</span>
-        <div><div class="t-name">PHP</div><div class="t-ver">8.1+</div></div>
+        <div><div class="t-name">PHP</div><div class="t-ver">8.2+</div></div>
       </div>
       <div class="tech-card reveal">
         <span class="t-icon">🚀</span>
@@ -1167,6 +1183,26 @@ const T = {
     hero_h1a:"Domainlerinizi", hero_h1b:"Akıllıca İzleyin.", hero_h1c:"Kaçırmayın.",
     hero_desc:"Web arayüzü ve güçlü CLI ile 80'den fazla TLD'yi izleyin, WHOIS değişikliklerini anlık takip edin, e-posta bildirimleri alın. PHP 8.2+ ile sıfırdan yeniden yazıldı.",
     hero_btn1:"İndir / Klonla", hero_btn2:"Özellikleri Gör",
+    nav_cloud:"Bulut Sürüm", hero_cloud:"Kurulumsuz Kullan", hero_cloud_note:"Kurulum gerekmez — bulut sürüm hazır:",
+    saas_tag:"Bulut Sürüm",
+    saas_h2:"Kurmak İstemiyor musunuz?",
+    saas_sub:"Domain Hunter'ı sunucunuza kurmadan kullanın. Hazır barındırılan sürümüyle saniyeler içinde başlayın.",
+    saas_f1_h:"Otomatik Gece Kontrolü",
+    saas_f1_p:"Domainleriniz her gece otomatik olarak kontrol edilir, değişiklikler anında e-posta ile bildirilir.",
+    saas_f2_h:"Anlık E-posta Bildirimleri",
+    saas_f2_p:"WHOIS değişikliklerinde hesap e-postanıza ayrıntılı uyarı gönderilir; hiçbir değişikliği kaçırmayın.",
+    saas_f3_h:"Toplu Domain Ekleme",
+    saas_f3_p:"Birden fazla alan adını aynı anda ekleyin, tümünü tek bir panelden yönetin.",
+    saas_f4_h:"Google ile Hızlı Giriş",
+    saas_f4_p:"Google hesabınızla saniyeler içinde kayıt olun ve domain izlemeye hemen başlayın.",
+    saas_f5_h:"MCP / AI Desteği",
+    saas_f5_p:"Claude gibi AI asistanlarıyla doğal dil kullanarak domain ekleyin, listeleyin ve yönetin.",
+    saas_btn:"Hemen Deneyin",
+    cta_btn3:"Bulut Sürümü Deneyin",
+    lib_tag:"Geliştiriciler İçin",
+    lib_h:"PHP Paketi: bahricanli/domainhunter",
+    lib_p:"WHOIS sorgulama ve domain ayrıştırma özelliklerini kendi projenize Composer ile ekleyin.",
+    lib_btn:"GitHub'da İncele",
     stat1:"Sürüm", stat2:"TLD Desteği", stat3:"Minimum", stat4:"Lisans",
     new_tag:"v2.0.5 Yenilikleri", new_h2:"Sıfırdan Yeniden Yazıldı",
     new_sub:"2011'deki orijinal koddan geriye yalnızca fikir kaldı. Her şey modern PHP mimarisiyle yeniden inşa edildi.",
@@ -1214,25 +1250,6 @@ const T = {
     cta_tag:"İndir & Kullan", cta_h2:"Domain Hunter v2.0.5'ı Deneyin",
     cta_p:"Açık kaynak, özgür ve ücretsiz. Composer veya tek PHAR dosyasıyla dakikalar içinde başlayın.",
     cta_btn1:"GitHub'dan İndir", cta_btn2:"SourceForge",
-    saas_tag:"Bulut Sürüm",
-    saas_h2:"Kurmak İstemiyor musunuz?",
-    saas_sub:"Domain Hunter'ı sunucunuza kurmadan kullanın. Hazır barındırılan sürümüyle saniyeler içinde başlayın.",
-    saas_f1_h:"Otomatik Gece Kontrolü",
-    saas_f1_p:"Domainleriniz her gece otomatik olarak kontrol edilir, değişiklikler anında e-posta ile bildirilir.",
-    saas_f2_h:"Anlık E-posta Bildirimleri",
-    saas_f2_p:"WHOIS değişikliklerinde hesap e-postanıza ayrıntılı uyarı gönderilir; hiçbir değişikliği kaçırmayın.",
-    saas_f3_h:"Toplu Domain Ekleme",
-    saas_f3_p:"Birden fazla alan adını aynı anda ekleyin, tümünü tek bir panelden yönetin.",
-    saas_f4_h:"Google ile Hızlı Giriş",
-    saas_f4_p:"Google hesabınızla saniyeler içinde kayıt olun ve domain izlemeye hemen başlayın.",
-    saas_f5_h:"MCP / AI Desteği",
-    saas_f5_p:"Claude gibi AI asistanlarıyla doğal dil kullanarak domain ekleyin, listeleyin ve yönetin.",
-    saas_btn:"Hemen Deneyin",
-    lib_tag:"Geliştiriciler İçin",
-    lib_h:"PHP Paketi: bahricanli/domainhunter",
-    lib_p:"WHOIS sorgulama ve domain ayrıştırma özelliklerini kendi projenize Composer ile ekleyin.",
-    lib_btn:"GitHub'da İncele",
-    cta_btn3:"Bulut Sürümü Deneyin",
     footer_desc:"Alan adlarınızı izleyin, değişikliklerden anında haberdar olun. Açık kaynaklı, özgür yazılım — v2.0.5.",
     fc1_h:"Proje", fc1_rel:"Sürümler", fc2_h:"Sayfalar",
   },
@@ -1243,6 +1260,26 @@ const T = {
     hero_h1a:"Monitor Your", hero_h1b:"Domains Smartly.", hero_h1c:"Never Miss One.",
     hero_desc:"Track 80+ TLDs with a web interface and powerful CLI. Get instant notifications on WHOIS changes. Completely rewritten with PHP 8.2+.",
     hero_btn1:"Download / Clone", hero_btn2:"See Features",
+    nav_cloud:"Cloud Version", hero_cloud:"Use Without Installing", hero_cloud_note:"No installation needed — the cloud version is ready:",
+    saas_tag:"Cloud Version",
+    saas_h2:"Don't Want to Install?",
+    saas_sub:"Use Domain Hunter without installing it on your server. Get started in seconds with the hosted version.",
+    saas_f1_h:"Automatic Nightly Check",
+    saas_f1_p:"Your domains are checked automatically every night. Any WHOIS changes are notified via email instantly.",
+    saas_f2_h:"Instant Email Notifications",
+    saas_f2_p:"Detailed alerts are sent to your account email on WHOIS changes. Never miss a domain update.",
+    saas_f3_h:"Bulk Domain Addition",
+    saas_f3_p:"Add multiple domains at once and manage them all from a single dashboard.",
+    saas_f4_h:"Quick Sign-in with Google",
+    saas_f4_p:"Sign up with your Google account in seconds and start monitoring domains right away.",
+    saas_f5_h:"MCP / AI Support",
+    saas_f5_p:"Add, list, and manage domains using natural language with AI assistants like Claude.",
+    saas_btn:"Try it Now",
+    cta_btn3:"Try Cloud Version",
+    lib_tag:"For Developers",
+    lib_h:"PHP Package: bahricanli/domainhunter",
+    lib_p:"Add WHOIS lookup and domain parsing features to your own project via Composer.",
+    lib_btn:"View on GitHub",
     stat1:"Version", stat2:"TLD Support", stat3:"Minimum", stat4:"License",
     new_tag:"v2.0.5 Changes", new_h2:"Built from Scratch",
     new_sub:"Only the idea remains from the original 2011 code. Everything was rebuilt with modern PHP architecture.",
@@ -1290,25 +1327,6 @@ const T = {
     cta_tag:"Download & Use", cta_h2:"Try Domain Hunter v2.0.5",
     cta_p:"Open source, free and no cost. Get started in minutes with Composer or a single PHAR file.",
     cta_btn1:"Download from GitHub", cta_btn2:"SourceForge",
-    saas_tag:"Cloud Version",
-    saas_h2:"Don't Want to Install?",
-    saas_sub:"Use Domain Hunter without installing it on your server. Get started in seconds with the hosted version.",
-    saas_f1_h:"Automatic Nightly Check",
-    saas_f1_p:"Your domains are checked automatically every night. Any WHOIS changes are notified via email instantly.",
-    saas_f2_h:"Instant Email Notifications",
-    saas_f2_p:"Detailed alerts are sent to your account email on WHOIS changes. Never miss a domain update.",
-    saas_f3_h:"Bulk Domain Addition",
-    saas_f3_p:"Add multiple domains at once and manage them all from a single dashboard.",
-    saas_f4_h:"Quick Sign-in with Google",
-    saas_f4_p:"Sign up with your Google account in seconds and start monitoring domains right away.",
-    saas_f5_h:"MCP / AI Support",
-    saas_f5_p:"Add, list, and manage domains using natural language with AI assistants like Claude.",
-    saas_btn:"Try it Now",
-    lib_tag:"For Developers",
-    lib_h:"PHP Package: bahricanli/domainhunter",
-    lib_p:"Add WHOIS lookup and domain parsing features to your own project via Composer.",
-    lib_btn:"View on GitHub",
-    cta_btn3:"Try Cloud Version",
     footer_desc:"Monitor your domains, get notified instantly on changes. Open source, free software — v2.0.5.",
     fc1_h:"Project", fc1_rel:"Releases", fc2_h:"Pages",
   },
@@ -1319,6 +1337,26 @@ const T = {
     hero_h1a:"Überwachen Sie Ihre", hero_h1b:"Domains intelligent.", hero_h1c:"Verpassen Sie nichts.",
     hero_desc:"Überwachen Sie 80+ TLDs mit Web-Oberfläche und leistungsstarker CLI. Erhalten Sie sofortige Benachrichtigungen bei WHOIS-Änderungen. Komplett mit PHP 8.2+ neu geschrieben.",
     hero_btn1:"Herunterladen / Klonen", hero_btn2:"Funktionen ansehen",
+    nav_cloud:"Cloud-Version", hero_cloud:"Ohne Installation nutzen", hero_cloud_note:"Keine Installation nötig – die Cloud-Version ist bereit:",
+    saas_tag:"Cloud-Version",
+    saas_h2:"Keine Installation gewünscht?",
+    saas_sub:"Nutzen Sie Domain Hunter ohne Installation. Starten Sie in Sekunden mit der gehosteten Version.",
+    saas_f1_h:"Automatische Nachtprüfung",
+    saas_f1_p:"Ihre Domains werden jede Nacht automatisch geprüft. Änderungen werden sofort per E-Mail gemeldet.",
+    saas_f2_h:"Sofortige E-Mail-Benachrichtigungen",
+    saas_f2_p:"Detaillierte Warnungen werden bei WHOIS-Änderungen an Ihre E-Mail gesendet.",
+    saas_f3_h:"Massen-Domain-Hinzufügung",
+    saas_f3_p:"Fügen Sie mehrere Domains auf einmal hinzu und verwalten Sie alles in einem Dashboard.",
+    saas_f4_h:"Schnelle Anmeldung mit Google",
+    saas_f4_p:"Registrieren Sie sich in Sekunden mit Google und beginnen Sie sofort mit der Überwachung.",
+    saas_f5_h:"MCP / KI-Unterstützung",
+    saas_f5_p:"Fügen Sie Domains mit natürlicher Sprache über KI-Assistenten wie Claude hinzu.",
+    saas_btn:"Jetzt ausprobieren",
+    cta_btn3:"Cloud-Version testen",
+    lib_tag:"Für Entwickler",
+    lib_h:"PHP-Paket: bahricanli/domainhunter",
+    lib_p:"Fügen Sie WHOIS-Abfrage und Domain-Parser-Funktionen via Composer zu Ihrem Projekt hinzu.",
+    lib_btn:"Auf GitHub ansehen",
     stat1:"Version", stat2:"TLD-Unterstützung", stat3:"Minimum", stat4:"Lizenz",
     new_tag:"v2.0.5 Änderungen", new_h2:"Von Grund auf neu aufgebaut",
     new_sub:"Vom ursprünglichen Code von 2011 ist nur die Idee geblieben. Alles wurde mit moderner PHP-Architektur neu aufgebaut.",
@@ -1366,25 +1404,6 @@ const T = {
     cta_tag:"Herunterladen & Verwenden", cta_h2:"Domain Hunter v2.0.5 ausprobieren",
     cta_p:"Open Source, frei und kostenlos. In Minuten starten mit Composer oder einer einzigen PHAR-Datei.",
     cta_btn1:"Von GitHub herunterladen", cta_btn2:"SourceForge",
-    saas_tag:"Cloud-Version",
-    saas_h2:"Keine Installation gewünscht?",
-    saas_sub:"Nutzen Sie Domain Hunter ohne Installation. Starten Sie in Sekunden mit der gehosteten Version.",
-    saas_f1_h:"Automatische Nachtprüfung",
-    saas_f1_p:"Ihre Domains werden jede Nacht automatisch geprüft. Änderungen werden sofort per E-Mail gemeldet.",
-    saas_f2_h:"Sofortige E-Mail-Benachrichtigungen",
-    saas_f2_p:"Detaillierte Warnungen werden bei WHOIS-Änderungen an Ihre E-Mail gesendet.",
-    saas_f3_h:"Massen-Domain-Hinzufügung",
-    saas_f3_p:"Fügen Sie mehrere Domains auf einmal hinzu und verwalten Sie alles in einem Dashboard.",
-    saas_f4_h:"Schnelle Anmeldung mit Google",
-    saas_f4_p:"Registrieren Sie sich in Sekunden mit Google und beginnen Sie sofort mit der Überwachung.",
-    saas_f5_h:"MCP / KI-Unterstützung",
-    saas_f5_p:"Fügen Sie Domains mit natürlicher Sprache über KI-Assistenten wie Claude hinzu.",
-    saas_btn:"Jetzt ausprobieren",
-    lib_tag:"Für Entwickler",
-    lib_h:"PHP-Paket: bahricanli/domainhunter",
-    lib_p:"Fügen Sie WHOIS-Abfrage und Domain-Parser-Funktionen via Composer zu Ihrem Projekt hinzu.",
-    lib_btn:"Auf GitHub ansehen",
-    cta_btn3:"Cloud-Version testen",
     footer_desc:"Überwachen Sie Ihre Domains, werden Sie sofort über Änderungen informiert. Open Source — v2.0.5.",
     fc1_h:"Projekt", fc1_rel:"Versionen", fc2_h:"Seiten",
   },
@@ -1395,6 +1414,26 @@ const T = {
     hero_h1a:"Monitoree Sus", hero_h1b:"Dominios Inteligente.", hero_h1c:"No Se Pierda Nada.",
     hero_desc:"Monitoree 80+ TLDs con interfaz web y potente CLI. Reciba notificaciones instantáneas sobre cambios en WHOIS. Reescrito completamente con PHP 8.2+.",
     hero_btn1:"Descargar / Clonar", hero_btn2:"Ver Características",
+    nav_cloud:"Versión en la Nube", hero_cloud:"Usar sin Instalar", hero_cloud_note:"Sin instalación: la versión en la nube está lista:",
+    saas_tag:"Versión en la Nube",
+    saas_h2:"¿No Quiere Instalar?",
+    saas_sub:"Use Domain Hunter sin instalarlo en su servidor. Comience en segundos con la versión alojada.",
+    saas_f1_h:"Verificación Nocturna Automática",
+    saas_f1_p:"Sus dominios se verifican automáticamente cada noche. Los cambios se notifican al instante por correo.",
+    saas_f2_h:"Notificaciones de Correo Instantáneas",
+    saas_f2_p:"Se envían alertas detalladas a su correo cuando hay cambios WHOIS.",
+    saas_f3_h:"Adición Masiva de Dominios",
+    saas_f3_p:"Agregue múltiples dominios a la vez y adminístrelos desde un panel central.",
+    saas_f4_h:"Inicio Rápido con Google",
+    saas_f4_p:"Regístrese con Google en segundos y comience a monitorear dominios de inmediato.",
+    saas_f5_h:"Soporte MCP / IA",
+    saas_f5_p:"Agregue, liste y administre dominios con lenguaje natural usando asistentes de IA como Claude.",
+    saas_btn:"Pruébelo Ahora",
+    cta_btn3:"Probar Versión en la Nube",
+    lib_tag:"Para Desarrolladores",
+    lib_h:"Paquete PHP: bahricanli/domainhunter",
+    lib_p:"Añada funciones de consulta WHOIS y análisis de dominios a su proyecto via Composer.",
+    lib_btn:"Ver en GitHub",
     stat1:"Versión", stat2:"Soporte TLD", stat3:"Mínimo", stat4:"Licencia",
     new_tag:"Cambios v2.0.5", new_h2:"Construido desde Cero",
     new_sub:"Del código original de 2011 solo queda la idea. Todo fue reconstruido con arquitectura PHP moderna.",
@@ -1442,25 +1481,6 @@ const T = {
     cta_tag:"Descargar & Usar", cta_h2:"Pruebe Domain Hunter v2.0.5",
     cta_p:"Código abierto, libre y gratuito. Empiece en minutos con Composer o un solo archivo PHAR.",
     cta_btn1:"Descargar de GitHub", cta_btn2:"SourceForge",
-    saas_tag:"Versión en la Nube",
-    saas_h2:"¿No Quiere Instalar?",
-    saas_sub:"Use Domain Hunter sin instalarlo en su servidor. Comience en segundos con la versión alojada.",
-    saas_f1_h:"Verificación Nocturna Automática",
-    saas_f1_p:"Sus dominios se verifican automáticamente cada noche. Los cambios se notifican al instante por correo.",
-    saas_f2_h:"Notificaciones de Correo Instantáneas",
-    saas_f2_p:"Se envían alertas detalladas a su correo cuando hay cambios WHOIS.",
-    saas_f3_h:"Adición Masiva de Dominios",
-    saas_f3_p:"Agregue múltiples dominios a la vez y adminístrelos desde un panel central.",
-    saas_f4_h:"Inicio Rápido con Google",
-    saas_f4_p:"Regístrese con Google en segundos y comience a monitorear dominios de inmediato.",
-    saas_f5_h:"Soporte MCP / IA",
-    saas_f5_p:"Agregue, liste y administre dominios con lenguaje natural usando asistentes de IA como Claude.",
-    saas_btn:"Pruébelo Ahora",
-    lib_tag:"Para Desarrolladores",
-    lib_h:"Paquete PHP: bahricanli/domainhunter",
-    lib_p:"Añada funciones de consulta WHOIS y análisis de dominios a su proyecto via Composer.",
-    lib_btn:"Ver en GitHub",
-    cta_btn3:"Probar Versión en la Nube",
     footer_desc:"Monitoree sus dominios, reciba notificaciones instantáneas. Software libre y abierto — v2.0.5.",
     fc1_h:"Proyecto", fc1_rel:"Versiones", fc2_h:"Páginas",
   },
@@ -1471,6 +1491,26 @@ const T = {
     hero_h1a:"Monitore Seus", hero_h1b:"Domínios com Inteligência.", hero_h1c:"Nunca Perca Nada.",
     hero_desc:"Monitore 80+ TLDs com interface web e CLI poderosa. Receba notificações instantâneas sobre mudanças no WHOIS. Completamente reescrito com PHP 8.2+.",
     hero_btn1:"Baixar / Clonar", hero_btn2:"Ver Recursos",
+    nav_cloud:"Versão na Nuvem", hero_cloud:"Usar sem Instalar", hero_cloud_note:"Sem instalação — a versão na nuvem está pronta:",
+    saas_tag:"Versão na Nuvem",
+    saas_h2:"Não Quer Instalar?",
+    saas_sub:"Use o Domain Hunter sem instalá-lo no seu servidor. Comece em segundos com a versão hospedada.",
+    saas_f1_h:"Verificação Noturna Automática",
+    saas_f1_p:"Seus domínios são verificados automaticamente todas as noites. Alterações são notificadas imediatamente por e-mail.",
+    saas_f2_h:"Notificações de E-mail Instantâneas",
+    saas_f2_p:"Alertas detalhados são enviados ao seu e-mail em alterações WHOIS.",
+    saas_f3_h:"Adição em Massa de Domínios",
+    saas_f3_p:"Adicione vários domínios de uma vez e gerencie-os em um único painel.",
+    saas_f4_h:"Login Rápido com Google",
+    saas_f4_p:"Cadastre-se com Google em segundos e comece a monitorar domínios imediatamente.",
+    saas_f5_h:"Suporte MCP / IA",
+    saas_f5_p:"Adicione, liste e gerencie domínios com linguagem natural usando assistentes de IA como Claude.",
+    saas_btn:"Experimente Agora",
+    cta_btn3:"Experimentar Versão na Nuvem",
+    lib_tag:"Para Desenvolvedores",
+    lib_h:"Pacote PHP: bahricanli/domainhunter",
+    lib_p:"Adicione funções de consulta WHOIS e análise de domínios ao seu projeto via Composer.",
+    lib_btn:"Ver no GitHub",
     stat1:"Versão", stat2:"Suporte TLD", stat3:"Mínimo", stat4:"Licença",
     new_tag:"Mudanças v2.0.5", new_h2:"Construído do Zero",
     new_sub:"Do código original de 2011 só ficou a ideia. Tudo foi reconstruído com arquitetura PHP moderna.",
@@ -1518,25 +1558,6 @@ const T = {
     cta_tag:"Baixar & Usar", cta_h2:"Experimente Domain Hunter v2.0.5",
     cta_p:"Código aberto, livre e gratuito. Comece em minutos com Composer ou um único arquivo PHAR.",
     cta_btn1:"Baixar do GitHub", cta_btn2:"SourceForge",
-    saas_tag:"Versão na Nuvem",
-    saas_h2:"Não Quer Instalar?",
-    saas_sub:"Use o Domain Hunter sem instalá-lo no seu servidor. Comece em segundos com a versão hospedada.",
-    saas_f1_h:"Verificação Noturna Automática",
-    saas_f1_p:"Seus domínios são verificados automaticamente todas as noites. Alterações são notificadas imediatamente por e-mail.",
-    saas_f2_h:"Notificações de E-mail Instantâneas",
-    saas_f2_p:"Alertas detalhados são enviados ao seu e-mail em alterações WHOIS.",
-    saas_f3_h:"Adição em Massa de Domínios",
-    saas_f3_p:"Adicione vários domínios de uma vez e gerencie-os em um único painel.",
-    saas_f4_h:"Login Rápido com Google",
-    saas_f4_p:"Cadastre-se com Google em segundos e comece a monitorar domínios imediatamente.",
-    saas_f5_h:"Suporte MCP / IA",
-    saas_f5_p:"Adicione, liste e gerencie domínios com linguagem natural usando assistentes de IA como Claude.",
-    saas_btn:"Experimente Agora",
-    lib_tag:"Para Desenvolvedores",
-    lib_h:"Pacote PHP: bahricanli/domainhunter",
-    lib_p:"Adicione funções de consulta WHOIS e análise de domínios ao seu projeto via Composer.",
-    lib_btn:"Ver no GitHub",
-    cta_btn3:"Experimentar Versão na Nuvem",
     footer_desc:"Monitore seus domínios, seja notificado instantaneamente sobre mudanças. Software livre — v2.0.5.",
     fc1_h:"Projeto", fc1_rel:"Versões", fc2_h:"Páginas",
   },
@@ -1547,6 +1568,26 @@ const T = {
     hero_h1a:"Умный мониторинг", hero_h1b:"ваших доменов.", hero_h1c:"Не пропустите ничего.",
     hero_desc:"Отслеживайте 80+ TLD через веб-интерфейс и мощный CLI. Получайте мгновенные уведомления об изменениях WHOIS. Полностью переписан на PHP 8.2+.",
     hero_btn1:"Скачать / Клонировать", hero_btn2:"Посмотреть функции",
+    nav_cloud:"Облачная версия", hero_cloud:"Использовать без установки", hero_cloud_note:"Установка не нужна — облачная версия готова:",
+    saas_tag:"Облачная версия",
+    saas_h2:"Не хотите устанавливать?",
+    saas_sub:"Используйте Domain Hunter без установки на сервер. Начните за секунды с готовой облачной версией.",
+    saas_f1_h:"Автоматическая ночная проверка",
+    saas_f1_p:"Ваши домены проверяются автоматически каждую ночь. Изменения уведомляются по e-mail мгновенно.",
+    saas_f2_h:"Мгновенные уведомления по e-mail",
+    saas_f2_p:"Подробные уведомления отправляются на ваш e-mail при изменениях WHOIS.",
+    saas_f3_h:"Массовое добавление доменов",
+    saas_f3_p:"Добавляйте несколько доменов сразу и управляйте ими из единой панели.",
+    saas_f4_h:"Быстрый вход через Google",
+    saas_f4_p:"Зарегистрируйтесь через Google за секунды и сразу начните мониторинг доменов.",
+    saas_f5_h:"Поддержка MCP / ИИ",
+    saas_f5_p:"Добавляйте и управляйте доменами с помощью ИИ-ассистентов на естественном языке.",
+    saas_btn:"Попробовать сейчас",
+    cta_btn3:"Попробовать облачную версию",
+    lib_tag:"Для разработчиков",
+    lib_h:"PHP-пакет: bahricanli/domainhunter",
+    lib_p:"Добавьте функции WHOIS-запроса и парсинга доменов в свой проект через Composer.",
+    lib_btn:"Смотреть на GitHub",
     stat1:"Версия", stat2:"Поддержка TLD", stat3:"Минимум", stat4:"Лицензия",
     new_tag:"Изменения v2.0.5", new_h2:"Построен с нуля",
     new_sub:"От оригинального кода 2011 года осталась только идея. Всё переписано с современной архитектурой PHP.",
@@ -1594,25 +1635,6 @@ const T = {
     cta_tag:"Скачать & Использовать", cta_h2:"Попробуйте Domain Hunter v2.0.5",
     cta_p:"Открытый исходный код, свободный и бесплатный. Начните за минуты с Composer или одним файлом PHAR.",
     cta_btn1:"Скачать с GitHub", cta_btn2:"SourceForge",
-    saas_tag:"Облачная версия",
-    saas_h2:"Не хотите устанавливать?",
-    saas_sub:"Используйте Domain Hunter без установки на сервер. Начните за секунды с готовой облачной версией.",
-    saas_f1_h:"Автоматическая ночная проверка",
-    saas_f1_p:"Ваши домены проверяются автоматически каждую ночь. Изменения уведомляются по e-mail мгновенно.",
-    saas_f2_h:"Мгновенные уведомления по e-mail",
-    saas_f2_p:"Подробные уведомления отправляются на ваш e-mail при изменениях WHOIS.",
-    saas_f3_h:"Массовое добавление доменов",
-    saas_f3_p:"Добавляйте несколько доменов сразу и управляйте ими из единой панели.",
-    saas_f4_h:"Быстрый вход через Google",
-    saas_f4_p:"Зарегистрируйтесь через Google за секунды и сразу начните мониторинг доменов.",
-    saas_f5_h:"Поддержка MCP / ИИ",
-    saas_f5_p:"Добавляйте и управляйте доменами с помощью ИИ-ассистентов на естественном языке.",
-    saas_btn:"Попробовать сейчас",
-    lib_tag:"Для разработчиков",
-    lib_h:"PHP-пакет: bahricanli/domainhunter",
-    lib_p:"Добавьте функции WHOIS-запроса и парсинга доменов в свой проект через Composer.",
-    lib_btn:"Смотреть на GitHub",
-    cta_btn3:"Попробовать облачную версию",
     footer_desc:"Мониторинг доменов, мгновенные уведомления об изменениях. Свободное ПО — v2.0.5.",
     fc1_h:"Проект", fc1_rel:"Релизы", fc2_h:"Страницы",
   },
@@ -1623,6 +1645,26 @@ const T = {
     hero_h1a:"智能监控", hero_h1b:"您的域名。", hero_h1c:"不再错过。",
     hero_desc:"通过Web界面和强大的CLI监控80+个顶级域名。即时获取WHOIS变更通知。基于PHP 8.2+完全重写。",
     hero_btn1:"下载 / 克隆", hero_btn2:"查看功能",
+    nav_cloud:"云端版本", hero_cloud:"免安装使用", hero_cloud_note:"无需安装 — 云端版本已就绪：",
+    saas_tag:"云端版本",
+    saas_h2:"不想安装？",
+    saas_sub:"无需在服务器上安装即可使用 Domain Hunter。使用托管版本，秒速上手。",
+    saas_f1_h:"自动夜间检测",
+    saas_f1_p:"您的域名每晚自动检测，任何变更即时通过邮件通知。",
+    saas_f2_h:"即时邮件通知",
+    saas_f2_p:"WHOIS 变更时，详细提醒将发送至您的邮箱，不错过任何更新。",
+    saas_f3_h:"批量添加域名",
+    saas_f3_p:"一次添加多个域名，在单一仪表板中统一管理。",
+    saas_f4_h:"Google 快速登录",
+    saas_f4_p:"通过 Google 账号秒速注册，立即开始监控域名。",
+    saas_f5_h:"MCP / AI 支持",
+    saas_f5_p:"使用 Claude 等 AI 助手通过自然语言添加、列出和管理域名。",
+    saas_btn:"立即体验",
+    cta_btn3:"体验云端版本",
+    lib_tag:"开发者专区",
+    lib_h:"PHP 包：bahricanli/domainhunter",
+    lib_p:"通过 Composer 将 WHOIS 查询和域名解析功能添加到您的项目中。",
+    lib_btn:"在 GitHub 查看",
     stat1:"版本", stat2:"TLD支持", stat3:"最低要求", stat4:"许可证",
     new_tag:"v2.0.5 更新", new_h2:"从零开始构建",
     new_sub:"2011年原始代码中只保留了理念。一切都用现代PHP架构重新构建。",
@@ -1670,25 +1712,6 @@ const T = {
     cta_tag:"下载 & 使用", cta_h2:"立即体验 Domain Hunter v2.0.5",
     cta_p:"开源、自由、免费。通过Composer或单个PHAR文件几分钟内开始。",
     cta_btn1:"从GitHub下载", cta_btn2:"SourceForge",
-    saas_tag:"云端版本",
-    saas_h2:"不想安装？",
-    saas_sub:"无需在服务器上安装即可使用 Domain Hunter。使用托管版本，秒速上手。",
-    saas_f1_h:"自动夜间检测",
-    saas_f1_p:"您的域名每晚自动检测，任何变更即时通过邮件通知。",
-    saas_f2_h:"即时邮件通知",
-    saas_f2_p:"WHOIS 变更时，详细提醒将发送至您的邮箱，不错过任何更新。",
-    saas_f3_h:"批量添加域名",
-    saas_f3_p:"一次添加多个域名，在单一仪表板中统一管理。",
-    saas_f4_h:"Google 快速登录",
-    saas_f4_p:"通过 Google 账号秒速注册，立即开始监控域名。",
-    saas_f5_h:"MCP / AI 支持",
-    saas_f5_p:"使用 Claude 等 AI 助手通过自然语言添加、列出和管理域名。",
-    saas_btn:"立即体验",
-    lib_tag:"开发者专区",
-    lib_h:"PHP 包：bahricanli/domainhunter",
-    lib_p:"通过 Composer 将 WHOIS 查询和域名解析功能添加到您的项目中。",
-    lib_btn:"在 GitHub 查看",
-    cta_btn3:"体验云端版本",
     footer_desc:"监控您的域名，及时获取变更通知。开源自由软件 — v2.0.5。",
     fc1_h:"项目", fc1_rel:"版本", fc2_h:"页面",
   },
@@ -1699,6 +1722,26 @@ const T = {
     hero_h1a:"ドメインを", hero_h1b:"スマートに監視。", hero_h1c:"見逃しなし。",
     hero_desc:"Webインターフェースと強力なCLIで80以上のTLDを監視。WHOIS変更を即座に通知。PHP 8.2+で完全に書き直されました。",
     hero_btn1:"ダウンロード / クローン", hero_btn2:"機能を見る",
+    nav_cloud:"クラウド版", hero_cloud:"インストール不要で使う", hero_cloud_note:"インストール不要 — クラウド版をすぐに利用できます：",
+    saas_tag:"クラウド版",
+    saas_h2:"インストールしたくない方へ",
+    saas_sub:"サーバーにインストールせずに Domain Hunter を使用できます。ホスト版ですぐに始めましょう。",
+    saas_f1_h:"自動夜間チェック",
+    saas_f1_p:"ドメインは毎晩自動チェックされ、変更は即座にメールで通知されます。",
+    saas_f2_h:"即時メール通知",
+    saas_f2_p:"WHOIS の変更時に詳細アラートがアカウントメールに届きます。更新を見逃しません。",
+    saas_f3_h:"一括ドメイン追加",
+    saas_f3_p:"複数のドメインを一度に追加し、ひとつのダッシュボードで管理できます。",
+    saas_f4_h:"Google でクイックサインイン",
+    saas_f4_p:"Google アカウントで数秒で登録し、すぐにドメイン監視を開始できます。",
+    saas_f5_h:"MCP / AI サポート",
+    saas_f5_p:"Claude などの AI アシスタントを使って自然言語でドメインを追加・管理できます。",
+    saas_btn:"今すぐ試す",
+    cta_btn3:"クラウド版を試す",
+    lib_tag:"開発者向け",
+    lib_h:"PHP パッケージ：bahricanli/domainhunter",
+    lib_p:"Composer で WHOIS 照会とドメイン解析機能を自分のプロジェクトに追加できます。",
+    lib_btn:"GitHub で見る",
     stat1:"バージョン", stat2:"TLDサポート", stat3:"最小要件", stat4:"ライセンス",
     new_tag:"v2.0.5 変更点", new_h2:"ゼロから構築",
     new_sub:"2011年のオリジナルコードからはアイデアだけが残りました。すべてがモダンなPHPアーキテクチャで再構築されました。",
@@ -1746,25 +1789,6 @@ const T = {
     cta_tag:"ダウンロード & 使用", cta_h2:"Domain Hunter v2.0.5を試してみましょう",
     cta_p:"オープンソース、自由、無料。ComposerまたはPHARファイル1つで数分以内に開始。",
     cta_btn1:"GitHubからダウンロード", cta_btn2:"SourceForge",
-    saas_tag:"クラウド版",
-    saas_h2:"インストールしたくない方へ",
-    saas_sub:"サーバーにインストールせずに Domain Hunter を使用できます。ホスト版ですぐに始めましょう。",
-    saas_f1_h:"自動夜間チェック",
-    saas_f1_p:"ドメインは毎晩自動チェックされ、変更は即座にメールで通知されます。",
-    saas_f2_h:"即時メール通知",
-    saas_f2_p:"WHOIS の変更時に詳細アラートがアカウントメールに届きます。更新を見逃しません。",
-    saas_f3_h:"一括ドメイン追加",
-    saas_f3_p:"複数のドメインを一度に追加し、ひとつのダッシュボードで管理できます。",
-    saas_f4_h:"Google でクイックサインイン",
-    saas_f4_p:"Google アカウントで数秒で登録し、すぐにドメイン監視を開始できます。",
-    saas_f5_h:"MCP / AI サポート",
-    saas_f5_p:"Claude などの AI アシスタントを使って自然言語でドメインを追加・管理できます。",
-    saas_btn:"今すぐ試す",
-    lib_tag:"開発者向け",
-    lib_h:"PHP パッケージ：bahricanli/domainhunter",
-    lib_p:"Composer で WHOIS 照会とドメイン解析機能を自分のプロジェクトに追加できます。",
-    lib_btn:"GitHub で見る",
-    cta_btn3:"クラウド版を試す",
     footer_desc:"ドメインを監視し、変更を即座に通知。オープンソース自由ソフトウェア — v2.0.5。",
     fc1_h:"プロジェクト", fc1_rel:"リリース", fc2_h:"ページ",
   }
@@ -1787,13 +1811,6 @@ function applyLang(lang) {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
 }
-
-document.querySelectorAll('.lang-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    var map={tr:'index.tr.html',en:'index.en.html',de:'index.de.html',es:'index.es.html',pt:'index.pt.html',ru:'index.ru.html',zh:'index.zh.html',ja:'index.ja.html'};
-    location.href = map[btn.dataset.lang] || 'index.tr.html';
-  });
-});
 
 applyLang(currentLang);
 
